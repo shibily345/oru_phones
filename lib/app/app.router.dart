@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart' as _i5;
 import 'package:flutter/material.dart';
 import 'package:oru_phones/ui/views/home/home_view.dart' as _i2;
-import 'package:oru_phones/ui/views/login/login_view.dart' as _i4;
 import 'package:oru_phones/ui/views/startup/startup_view.dart' as _i3;
 import 'package:stacked/stacked.dart' as _i1;
 import 'package:stacked_services/stacked_services.dart' as _i6;
@@ -37,10 +36,6 @@ class StackedRouter extends _i1.RouterBase {
       Routes.startupView,
       page: _i3.StartupView,
     ),
-    _i1.RouteDef(
-      Routes.loginView,
-      page: _i4.LoginView,
-    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
@@ -53,12 +48,6 @@ class StackedRouter extends _i1.RouterBase {
     _i3.StartupView: (data) {
       return _i5.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
-        settings: data,
-      );
-    },
-    _i4.LoginView: (data) {
-      return _i5.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i4.LoginView(),
         settings: data,
       );
     },
