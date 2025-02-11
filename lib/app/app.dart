@@ -6,6 +6,7 @@ import 'package:oru_phones/ui/views/home/home_view.dart';
 import 'package:oru_phones/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:oru_phones/services/products_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -19,6 +20,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: ApiService),
+    LazySingleton(classType: ProductsService),
 // @stacked-service
   ],
   bottomsheets: [

@@ -9,7 +9,10 @@ import 'dart:ui' as _i6;
 import 'package:flutter/material.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
+import 'package:oru_phones/domain/models/brands/brand.dart' as _i9;
+import 'package:oru_phones/domain/models/product.dart' as _i8;
 import 'package:oru_phones/services/api_service.dart' as _i7;
+import 'package:oru_phones/services/products_service.dart' as _i10;
 import 'package:stacked_services/stacked_services.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -688,4 +691,126 @@ class MockDialogService extends _i1.Mock implements _i2.DialogService {
 /// A class which mocks [ApiService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockApiService extends _i1.Mock implements _i7.ApiService {}
+class MockApiService extends _i1.Mock implements _i7.ApiService {
+  @override
+  String get baseUrl => (super.noSuchMethod(
+        Invocation.getter(#baseUrl),
+        returnValue: _i3.dummyValue<String>(
+          this,
+          Invocation.getter(#baseUrl),
+        ),
+        returnValueForMissingStub: _i3.dummyValue<String>(
+          this,
+          Invocation.getter(#baseUrl),
+        ),
+      ) as String);
+
+  @override
+  _i5.Future<List<_i8.Product>> getProducts({Map<String, dynamic>? filters}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getProducts,
+          [],
+          {#filters: filters},
+        ),
+        returnValue: _i5.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+        returnValueForMissingStub:
+            _i5.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+      ) as _i5.Future<List<_i8.Product>>);
+
+  @override
+  _i5.Future<List<_i9.Brand>> getBrands() => (super.noSuchMethod(
+        Invocation.method(
+          #getBrands,
+          [],
+        ),
+        returnValue: _i5.Future<List<_i9.Brand>>.value(<_i9.Brand>[]),
+        returnValueForMissingStub:
+            _i5.Future<List<_i9.Brand>>.value(<_i9.Brand>[]),
+      ) as _i5.Future<List<_i9.Brand>>);
+}
+
+/// A class which mocks [ProductsService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProductsService extends _i1.Mock implements _i10.ProductsService {
+  @override
+  List<_i8.Product> get products => (super.noSuchMethod(
+        Invocation.getter(#products),
+        returnValue: <_i8.Product>[],
+        returnValueForMissingStub: <_i8.Product>[],
+      ) as List<_i8.Product>);
+
+  @override
+  List<_i9.Brand> get brands => (super.noSuchMethod(
+        Invocation.getter(#brands),
+        returnValue: <_i9.Brand>[],
+        returnValueForMissingStub: <_i9.Brand>[],
+      ) as List<_i9.Brand>);
+
+  @override
+  int get listenersCount => (super.noSuchMethod(
+        Invocation.getter(#listenersCount),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i5.Future<List<_i8.Product>> getProducts() => (super.noSuchMethod(
+        Invocation.method(
+          #getProducts,
+          [],
+        ),
+        returnValue: _i5.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+        returnValueForMissingStub:
+            _i5.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+      ) as _i5.Future<List<_i8.Product>>);
+
+  @override
+  _i5.Future<List<_i9.Brand>> getBrands() => (super.noSuchMethod(
+        Invocation.method(
+          #getBrands,
+          [],
+        ),
+        returnValue: _i5.Future<List<_i9.Brand>>.value(<_i9.Brand>[]),
+        returnValueForMissingStub:
+            _i5.Future<List<_i9.Brand>>.value(<_i9.Brand>[]),
+      ) as _i5.Future<List<_i9.Brand>>);
+
+  @override
+  void listenToReactiveValues(List<dynamic>? reactiveValues) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #listenToReactiveValues,
+          [reactiveValues],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void addListener(void Function()? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void removeListener(void Function()? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:oru_phones/domain/models/product.dart';
+import 'package:oru_phones/ui/common/ui_helpers.dart';
+import 'package:oru_phones/ui/views/home/widgets/default.dart';
+import 'package:oru_phones/ui/views/home/widgets/image.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -8,21 +12,23 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      borderOnForeground: true,
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image with Verified Badge
           Stack(
             children: [
               ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(12)),
-                child: Image.asset(product.image,
-                    fit: BoxFit.cover, width: double.infinity, height: 160),
-              ),
-              if (product.isVerified)
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12)),
+                  child: CachedImage(
+                      imageUrl: product.imagePath,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: screenHeight(context) * 0.19)),
+              if (product.verified)
                 Positioned(
                   top: 8,
                   left: 8,
@@ -49,33 +55,38 @@ class ProductCard extends StatelessWidget {
               ),
             ],
           ),
-
-          // Title
+          verticalSpaceTiny,
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              product.title,
+              product.marketingName,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              maxLines: 2,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-
-          // Price
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ShowText(
+                text:
+                    "${product.deviceRam}/${product.deviceStorage} ⦿ ${product.deviceCondition}",
+                fontSize: 13,
+                fontWeight: FontWeight.normal),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
                 Text(
-                  "₹ ${product.price.toStringAsFixed(0)}",
+                  "₹ ${product.discountedPrice.toStringAsFixed(0)}",
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  "₹ ${product.oldPrice.toStringAsFixed(0)}",
+                  "₹ ${product.originalPrice.toStringAsFixed(0)}",
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 10,
                     decoration: TextDecoration.lineThrough,
                     color: Colors.grey,
                   ),
@@ -87,24 +98,28 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "(${((1 - product.price / product.oldPrice) * 100).toStringAsFixed(0)}% off)",
+              "(${((1 - product.discountedPrice / product.originalPrice) * 100).toStringAsFixed(0)}% off)",
               style: const TextStyle(color: Colors.red, fontSize: 14),
             ),
           ),
-          // Location & Date
-          Padding(
+          const Spacer(),
+          Container(
             padding: const EdgeInsets.all(8.0),
+            decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 233, 232, 232),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(10))),
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Text(
-                    product.location,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    "Abirami Nagar, Maharashtra",
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Text(
-                  product.date,
+                  product.listingDate,
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
@@ -114,24 +129,4 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class Product {
-  final String title;
-  final String image;
-  final double price;
-  final double oldPrice;
-  final String location;
-  final String date;
-  final bool isVerified;
-
-  Product({
-    required this.title,
-    required this.image,
-    required this.price,
-    required this.oldPrice,
-    required this.location,
-    required this.date,
-    this.isVerified = false,
-  });
 }

@@ -1,17 +1,17 @@
 import 'package:oru_phones/app/app.bottomsheets.dart';
 import 'package:oru_phones/app/app.dialogs.dart';
 import 'package:oru_phones/app/app.locator.dart';
-import 'package:oru_phones/app/app.router.dart';
+import 'package:oru_phones/services/products_service.dart';
 import 'package:oru_phones/ui/common/app_strings.dart';
-import 'package:oru_phones/ui/views/home/widgets/product_card.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class HomeViewModel extends FormViewModel {
   final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
-  final _navigationService = locator<NavigationService>();
-
+  // final _navigationService = locator<NavigationService>();
+  final products = locator<ProductsService>().products;
+  final brands = locator<ProductsService>().brands;
   String get counterLabel => 'Counter is: $_counter';
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
@@ -34,19 +34,7 @@ class HomeViewModel extends FormViewModel {
     "assets/images/Property 1=Banner 4.png",
     "assets/images/Property 1=Banner 5.png",
   ];
-  final List<Product> products = List.generate(
-    10,
-    (index) => Product(
-      title: "Apple iPhone 13 Pro",
-      image:
-          "assets/images/Property 1=Banner 1.png", // Change this to actual image path
-      price: 41500,
-      oldPrice: 81500,
-      location: "Nijampur, Luc...",
-      date: "July 25th",
-      isVerified: true,
-    ),
-  );
+
   final List<Map<String, String>> menuItems = [
     {
       "title": "Sell Used Phones",
@@ -114,9 +102,5 @@ class HomeViewModel extends FormViewModel {
       title: ksHomeBottomSheetTitle,
       description: ksHomeBottomSheetDescription,
     );
-  }
-
-  void goToLoginPage() {
-    _navigationService.navigateToLoginView();
   }
 }

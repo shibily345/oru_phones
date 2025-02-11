@@ -6,6 +6,7 @@ class ShowText extends StatelessWidget {
   final double? fontSize;
   final FontWeight? fontWeight;
   final Color? color;
+  final int? maxLines;
   final TextAlign? textAlign;
 
   const ShowText({
@@ -15,11 +16,13 @@ class ShowText extends StatelessWidget {
     this.fontWeight,
     this.color,
     this.textAlign,
+    this.maxLines,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
+      maxLines: maxLines ?? 1,
       text, // Use localized text
       style: TextStyle(
         fontSize: fontSize ?? Theme.of(context).textTheme.bodyMedium?.fontSize,
@@ -148,7 +151,10 @@ class CustomContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(color: borderColor ?? Colors.transparent),
         boxShadow: boxShadow ??
-            [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2)],
+            [
+              const BoxShadow(
+                  color: Colors.black12, blurRadius: 5, spreadRadius: 2)
+            ],
       ),
       child: child,
     );
