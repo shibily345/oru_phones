@@ -4,6 +4,7 @@ import 'package:oru_phones/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:oru_phones/services/api_service.dart';
 import 'package:oru_phones/services/products_service.dart';
+import 'package:oru_phones/services/authentication_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -14,6 +15,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ApiService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ProductsService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<AuthenticationService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -22,6 +24,7 @@ void registerServices() {
   getAndRegisterDialogService();
   getAndRegisterApiService();
   getAndRegisterProductsService();
+  getAndRegisterAuthenticationService();
 // @stacked-mock-register
 }
 
@@ -86,6 +89,13 @@ MockProductsService getAndRegisterProductsService() {
   _removeRegistrationIfExists<ProductsService>();
   final service = MockProductsService();
   locator.registerSingleton<ProductsService>(service);
+  return service;
+}
+
+MockAuthenticationService getAndRegisterAuthenticationService() {
+  _removeRegistrationIfExists<AuthenticationService>();
+  final service = MockAuthenticationService();
+  locator.registerSingleton<AuthenticationService>(service);
   return service;
 }
 // @stacked-mock-create

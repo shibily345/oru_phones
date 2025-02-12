@@ -7,12 +7,16 @@ import 'package:oru_phones/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:oru_phones/services/products_service.dart';
+import 'package:oru_phones/ui/views/login/login_view.dart';
+import 'package:oru_phones/services/authentication_service.dart';
+import 'package:oru_phones/ui/dialogs/accept_tnc/accept_tnc_dialog.dart';
 // @stacked-import
 
 @StackedApp(
   routes: [
     MaterialRoute(page: HomeView),
     MaterialRoute(page: StartupView),
+    MaterialRoute(page: LoginView),
 // @stacked-route
   ],
   dependencies: [
@@ -21,6 +25,7 @@ import 'package:oru_phones/services/products_service.dart';
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: ApiService),
     LazySingleton(classType: ProductsService),
+    LazySingleton(classType: AuthenticationService),
 // @stacked-service
   ],
   bottomsheets: [
@@ -30,7 +35,8 @@ import 'package:oru_phones/services/products_service.dart';
   ],
   dialogs: [
     StackedDialog(classType: InfoAlertDialog),
-    // @stacked-dialog
+    StackedDialog(classType: AcceptTncDialog),
+// @stacked-dialog
   ],
 )
 class App {}

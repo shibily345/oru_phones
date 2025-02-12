@@ -45,4 +45,46 @@ class ApiService {
       throw Exception('Failed to load brands: ${response.statusCode}');
     }
   }
+
+  //!- Authentication
+
+  Future<OtpResponse> sendOtp(int countryCode, int mobileNumber) async {
+    final url =
+        Uri.http(baseUrl, "/login/otpCreate"); // Replace with actual API URL
+
+    final Map<String, dynamic> requestBody = {
+      "countryCode": countryCode,
+      "mobileNumber": mobileNumber
+    };
+
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return OtpResponse.fromJson(jsonResponse);
+    } else {
+      throw Exception("Failed to send OTP: ${response.body}");
+    }
+  }
+}
+
+class OtpResponse {
+  final String reason;
+  final String status;
+  final String mobileNumber;
+
+  OtpResponse(
+      {required this.reason, required this.status, required this.mobileNumber});
+
+  factory OtpResponse.fromJson(Map<String, dynamic> json) {
+    return OtpResponse(
+      reason: json["reason"] ?? "",
+      status: json["status"] ?? "",
+      mobileNumber: json["dataObject"]["mobileNumber"] ?? "",
+    );
+  }
 }

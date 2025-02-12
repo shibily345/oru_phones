@@ -78,9 +78,10 @@ class CustomTextFormField extends StatelessWidget {
   final String hintText;
   final TextInputType keyboardType;
   final bool obscureText;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
   final IconData? suffixIcon;
   final VoidCallback? suffixAction;
+  final FormFieldValidator? validate;
 
   const CustomTextFormField({
     Key? key,
@@ -92,6 +93,7 @@ class CustomTextFormField extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.suffixAction,
+    this.validate,
   }) : super(key: key);
 
   @override
@@ -106,9 +108,13 @@ class CustomTextFormField extends StatelessWidget {
           controller: controller,
           keyboardType: keyboardType,
           obscureText: obscureText,
+          validator: validate ??
+              (value) {
+                return null;
+              },
           decoration: InputDecoration(
             hintText: hintText, // Localized hint text
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+            prefixIcon: prefixIcon,
             suffixIcon: suffixIcon != null
                 ? IconButton(
                     icon: Icon(suffixIcon), onPressed: suffixAction ?? () {})

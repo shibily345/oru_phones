@@ -26,7 +26,9 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
   ) {
     return Scaffold(
         floatingActionButton: const SellButton(),
-        drawer: const DrawerMain(),
+        drawer: DrawerMain(
+          vm: viewModel,
+        ),
         body: SafeArea(
           child: CustomScrollView(
             slivers: <Widget>[
@@ -387,19 +389,22 @@ class AppBarMain extends StatelessWidget {
               const SizedBox(width: 5),
               const Icon(Icons.location_on, color: Colors.black),
               const SizedBox(width: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onPressed: () {
-                  vm.showBottomSheet();
-                },
-                child: const Text("Login"),
-              ),
+              vm.isLoggedin
+                  ? const SizedBox()
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amber,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                        // vm.showBottomSheet();
+                        vm.goToLogin();
+                      },
+                      child: const Text("Login"),
+                    ),
             ],
           ),
         ],
@@ -409,8 +414,10 @@ class AppBarMain extends StatelessWidget {
 }
 
 class DrawerMain extends StatelessWidget {
+  final HomeViewModel vm;
   const DrawerMain({
     super.key,
+    required this.vm,
   });
 
   @override
@@ -419,25 +426,36 @@ class DrawerMain extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(
-              decoration: const BoxDecoration(color: Colors.blue),
-              child: Row(
-                children: [
-                  CustomContainer(
-                      child: Image.asset(
-                    "assets/images/logo.png",
-                    height: 30,
-                  ))
-                ],
-              )),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CustomButton(title: "Login/Signup"),
+          verticalSpaceLarge,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+            child: Row(
+              children: [
+                Image.asset(
+                  "assets/images/logo.png",
+                  height: 30,
+                  width: 80,
+                ),
+                const Spacer(),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+              ],
+            ),
           ),
+          vm.isLoggedin
+              ? const SizedBox()
+              : const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CustomButton(title: "Login/Signup"),
+                ),
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: CustomButton(title: "Sell Your Phone"),
           ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const ShowText(text: "Logout"),
+            onTap: () {},
+          )
           // _buildDrawerItem(Icons.home, "Home", () {
           //   Navigator.pop(context);
           // }),

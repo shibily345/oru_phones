@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:oru_phones/app/app.locator.dart';
 import 'package:oru_phones/domain/models/brands/brand.dart';
 import 'package:oru_phones/domain/models/product.dart';
@@ -21,7 +20,7 @@ class ProductsService with ListenableServiceMixin {
 
   Future<List<Brand>> getBrands() async {
     _brands = await _apiService.getBrands();
-    debugPrint("Got It *******************  ${_brands.nonNulls}");
+    //debugPrint("Got It *******************  ${_brands.nonNulls}");
     return _brands;
   }
 }
