@@ -26,11 +26,7 @@ class LoginViewModel extends FormViewModel {
   bool? get aceepted => _accepted;
   bool? _validOtp = false;
   bool? get validatedOtp => _validOtp;
-  // final List<Widget> pages = [
-  //   const PageWidget(text: "Page 1", color: Colors.red),
-  //   const PageWidget(text: "Page 2", color: Colors.green),
-  //   const PageWidget(text: "Page 3", color: Colors.blue),
-  // ];
+
   void acceptTnC(bool? value) {
     _accepted = value;
     rebuildUi();

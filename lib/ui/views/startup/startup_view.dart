@@ -15,10 +15,11 @@ class StartupView extends StackedView<StartupViewModel> {
     Widget? child,
   ) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Lottie.asset(
           width: MediaQuery.of(context).size.width,
-          repeat: false,
+          repeat: true,
           "assets/animations/Splash.json",
           fit: BoxFit.fill,
         ),

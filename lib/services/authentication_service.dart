@@ -13,6 +13,8 @@ class AuthenticationService {
   bool get isLoggedin => _isLoggedin;
   UserModel? _user;
   User? get user => _user!.user;
+  List<dynamic> _likedProducts = [];
+  List<dynamic>? get likedProducts => _likedProducts;
   final String baseUrl = '40.90.224.241:5000';
   Future<OtpResponse> sendOtpRequest(int phone) async {
     try {
@@ -83,7 +85,9 @@ class AuthenticationService {
         _user = UserModel.fromJson(data);
         if (_user != null) {
           _saveCrsfToken(_user!.csrfToken);
-          "saved CrfToken".dp;
+          _likedProducts = _user!.user.favListings;
+          "$likedProducts".dp;
+          "saved CrfToken ${_user!.csrfToken}    $authCookie".dp;
         }
       }
     }
@@ -135,6 +139,47 @@ class AuthenticationService {
     // return null;
   }
 
+  Future<String> updateFavs(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final csrfToken = prefs.getString('csrfToken');
+    final authCookie = prefs.getString('auth_cookie');
+
+    // final csrfToken = prefs.getString('csrfToken');
+
+    if (csrfToken == null) {
+      'No session found, user is not logged in.'.dp;
+      return "Not logged in";
+    }
+    final Map<String, dynamic> requestBody = {"listingId": id, "isFav": true};
+    try {
+      final response = await http.post(
+        Uri.http(baseUrl, "/update"),
+        body: jsonEncode(requestBody),
+        headers: {
+          'X-Csrf-Token': csrfToken,
+          'Cookie': authCookie!,
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // final data = jsonDecode(response.body);
+
+        _isLoggedin = true;
+        "Successfully Updated Faverate".dp;
+
+        return "success";
+      } else {
+        "${response.statusCode}".dp;
+        return "failed";
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+
+    // return null;
+  }
+
   // Save Cookie to SharedPreferences
   Future<void> _saveCookie(
     String cookie,
@@ -148,5 +193,34 @@ class AuthenticationService {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('csrfToken', csrfToken);
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final csrfToken = prefs.getString('csrfToken');
+    final authCookie = prefs.getString('auth_cookie');
+    try {
+      final response = await http.get(
+        Uri.http(baseUrl, "/logout"),
+        headers: {
+          'X-Csrf-Token': csrfToken!,
+          'Cookie': authCookie!,
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // final data = jsonDecode(response.body);
+
+        _isLoggedin = false;
+        "Successfully LogedOut".dp;
+        await prefs.remove('csrfToken');
+        await prefs.remove('auth_cookie');
+      } else {
+        "${response.statusCode}".dp;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

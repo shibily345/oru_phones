@@ -10,11 +10,16 @@ import 'package:flutter/material.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i4;
 import 'package:oru_phones/domain/models/brands/brand.dart' as _i9;
+import 'package:oru_phones/domain/models/faq_model.dart' as _i11;
+import 'package:oru_phones/domain/models/filter_model.dart' as _i10;
 import 'package:oru_phones/domain/models/product.dart' as _i8;
-import 'package:oru_phones/domain/models/user_model.dart' as _i12;
+import 'package:oru_phones/domain/models/selected_filter_model.dart' as _i13;
 import 'package:oru_phones/services/api_service.dart' as _i2;
-import 'package:oru_phones/services/authentication_service.dart' as _i11;
-import 'package:oru_phones/services/products_service.dart' as _i10;
+import 'package:oru_phones/services/authentication_service.dart' as _i14;
+import 'package:oru_phones/services/faqs_service.dart' as _i17;
+import 'package:oru_phones/services/fcm_notification_service.dart' as _i16;
+import 'package:oru_phones/services/filters_service.dart' as _i15;
+import 'package:oru_phones/services/products_service.dart' as _i12;
 import 'package:stacked_services/stacked_services.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -776,12 +781,33 @@ class MockApiService extends _i1.Mock implements _i2.ApiService {
           ),
         )),
       ) as _i6.Future<_i2.OtpResponse>);
+
+  @override
+  _i6.Future<_i10.FilterModel?> fetchFilters() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchFilters,
+          [],
+        ),
+        returnValue: _i6.Future<_i10.FilterModel?>.value(),
+        returnValueForMissingStub: _i6.Future<_i10.FilterModel?>.value(),
+      ) as _i6.Future<_i10.FilterModel?>);
+
+  @override
+  _i6.Future<List<_i11.FAQ>> fetchFAQs() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchFAQs,
+          [],
+        ),
+        returnValue: _i6.Future<List<_i11.FAQ>>.value(<_i11.FAQ>[]),
+        returnValueForMissingStub:
+            _i6.Future<List<_i11.FAQ>>.value(<_i11.FAQ>[]),
+      ) as _i6.Future<List<_i11.FAQ>>);
 }
 
 /// A class which mocks [ProductsService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockProductsService extends _i1.Mock implements _i10.ProductsService {
+class MockProductsService extends _i1.Mock implements _i12.ProductsService {
   @override
   List<_i8.Product> get products => (super.noSuchMethod(
         Invocation.getter(#products),
@@ -808,6 +834,37 @@ class MockProductsService extends _i1.Mock implements _i10.ProductsService {
         Invocation.method(
           #getProducts,
           [],
+        ),
+        returnValue: _i6.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+        returnValueForMissingStub:
+            _i6.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+      ) as _i6.Future<List<_i8.Product>>);
+
+  @override
+  _i6.Future<List<_i8.Product>> getProductsWithFilters(
+    _i13.SelectedFilterModel? filter,
+    Map<String, dynamic>? sort,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getProductsWithFilters,
+          [
+            filter,
+            sort,
+          ],
+        ),
+        returnValue: _i6.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+        returnValueForMissingStub:
+            _i6.Future<List<_i8.Product>>.value(<_i8.Product>[]),
+      ) as _i6.Future<List<_i8.Product>>);
+
+  @override
+  _i6.Future<List<_i8.Product>> getProductsWithSorting(
+          Map<String, dynamic>? sort) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getProductsWithSorting,
+          [sort],
         ),
         returnValue: _i6.Future<List<_i8.Product>>.value(<_i8.Product>[]),
         returnValueForMissingStub:
@@ -867,7 +924,7 @@ class MockProductsService extends _i1.Mock implements _i10.ProductsService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationService extends _i1.Mock
-    implements _i11.AuthenticationService {
+    implements _i14.AuthenticationService {
   @override
   String get baseUrl => (super.noSuchMethod(
         Invocation.getter(#baseUrl),
@@ -929,12 +986,122 @@ class MockAuthenticationService extends _i1.Mock
       ) as _i6.Future<void>);
 
   @override
-  _i6.Future<_i12.UserModel?> checkLoginStatus() => (super.noSuchMethod(
+  _i6.Future<void> checkLoginStatus() => (super.noSuchMethod(
         Invocation.method(
           #checkLoginStatus,
           [],
         ),
-        returnValue: _i6.Future<_i12.UserModel?>.value(),
-        returnValueForMissingStub: _i6.Future<_i12.UserModel?>.value(),
-      ) as _i6.Future<_i12.UserModel?>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<String> updateName(String? name) => (super.noSuchMethod(
+        Invocation.method(
+          #updateName,
+          [name],
+        ),
+        returnValue: _i6.Future<String>.value(_i4.dummyValue<String>(
+          this,
+          Invocation.method(
+            #updateName,
+            [name],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<String>.value(_i4.dummyValue<String>(
+          this,
+          Invocation.method(
+            #updateName,
+            [name],
+          ),
+        )),
+      ) as _i6.Future<String>);
+
+  @override
+  _i6.Future<String> updateFavs(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #updateFavs,
+          [id],
+        ),
+        returnValue: _i6.Future<String>.value(_i4.dummyValue<String>(
+          this,
+          Invocation.method(
+            #updateFavs,
+            [id],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<String>.value(_i4.dummyValue<String>(
+          this,
+          Invocation.method(
+            #updateFavs,
+            [id],
+          ),
+        )),
+      ) as _i6.Future<String>);
+
+  @override
+  _i6.Future<void> logout() => (super.noSuchMethod(
+        Invocation.method(
+          #logout,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [FiltersService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFiltersService extends _i1.Mock implements _i15.FiltersService {
+  @override
+  _i6.Future<void> getFilter() => (super.noSuchMethod(
+        Invocation.method(
+          #getFilter,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [FcmNotificationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFcmNotificationService extends _i1.Mock
+    implements _i16.FcmNotificationService {
+  @override
+  _i6.Future<void> initialize() => (super.noSuchMethod(
+        Invocation.method(
+          #initialize,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [FaqsService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFaqsService extends _i1.Mock implements _i17.FaqsService {
+  @override
+  List<_i11.FAQ> get faqs => (super.noSuchMethod(
+        Invocation.getter(#faqs),
+        returnValue: <_i11.FAQ>[],
+        returnValueForMissingStub: <_i11.FAQ>[],
+      ) as List<_i11.FAQ>);
+
+  @override
+  _i6.Future<List<_i11.FAQ>> getFaqs() => (super.noSuchMethod(
+        Invocation.method(
+          #getFaqs,
+          [],
+        ),
+        returnValue: _i6.Future<List<_i11.FAQ>>.value(<_i11.FAQ>[]),
+        returnValueForMissingStub:
+            _i6.Future<List<_i11.FAQ>>.value(<_i11.FAQ>[]),
+      ) as _i6.Future<List<_i11.FAQ>>);
 }

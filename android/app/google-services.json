@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "626939571113",
+    "project_id": "oruphones-318f3",
+    "storage_bucket": "oruphones-318f3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626939571113:android:43a80d441bfd0aada2b2b8",
+        "android_client_info": {
+          "package_name": "com.example.oru_phones"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhRznQglWVDwHDLYmIUYl4TwUpiDzfvZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

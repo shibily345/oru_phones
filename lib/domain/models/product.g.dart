@@ -26,10 +26,10 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
       make: json['make'] as String,
       marketingName: json['marketingName'] as String,
       openForNegotiation: json['openForNegotiation'] as bool,
-      verified: json['verified'] as bool,
+      verified: json['verified'] as bool? ?? false,
       listingId: json['listingId'] as String,
       status: json['status'] as String,
-      verifiedDate: json['verifiedDate'] as String,
+      verifiedDate: json['verifiedDate'] as String? ?? "",
       listingDate: json['listingDate'] as String,
       deviceRam: json['deviceRam'] as String,
       warranty: json['warranty'] as String,
@@ -75,10 +75,10 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
 
 _$ProductImageImpl _$$ProductImageImplFromJson(Map<String, dynamic> json) =>
     _$ProductImageImpl(
-      thumbImage: json['thumbImage'] as String,
-      fullImage: json['fullImage'] as String,
-      isVarified: json['isVarified'] as String,
-      option: json['option'] as String,
+      thumbImage: json['thumbImage'] as String? ?? "",
+      fullImage: json['fullImage'] as String? ?? "",
+      isVarified: json['isVarified'] as String? ?? "",
+      option: json['option'] as String? ?? "",
       id: json['_id'] as String,
     );
 

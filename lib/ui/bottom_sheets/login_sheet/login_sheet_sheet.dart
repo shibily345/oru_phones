@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oru_phones/ui/bottom_sheets/login_sheet/login_sheet_sheet.form.dart';
 import 'package:oru_phones/ui/common/ui_helpers.dart';
 import 'package:oru_phones/ui/views/home/widgets/default.dart';
 import 'package:pinput/pinput.dart';
@@ -13,7 +14,7 @@ import 'login_sheet_sheet_model.dart';
   FormTextField(name: 'otpInput'),
   FormTextField(name: 'nameInput'),
 ])
-class LoginSheet extends StackedView<LoginSheetModel> {
+class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
   final Function(SheetResponse response)? completer;
   final SheetRequest request;
   const LoginSheet({
@@ -43,7 +44,7 @@ class LoginSheet extends StackedView<LoginSheetModel> {
           controller: viewModel.pageController,
           physics: const NeverScrollableScrollPhysics(), // Disable swipe
           children: [
-            numberSection(viewModel),
+            numberSection(viewModel, context, numberInputController),
             otpSection(viewModel),
             nameSection(viewModel)
           ],
@@ -52,20 +53,12 @@ class LoginSheet extends StackedView<LoginSheetModel> {
     );
   }
 
-  Column numberSection(LoginSheetModel vm) {
+  Column numberSection(LoginSheetModel vm, BuildContext ctx,
+      TextEditingController numberController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // AppBar(
-        //   backgroundColor: Colors.white,
-        //   flexibleSpace: const ShowText(text: "Sign in to continue"),
-        //   automaticallyImplyLeading: false,
-        //   actions: [
-        //     IconButton(onPressed: () {}, icon: const Icon(Icons.close))
-        //   ],
-        // ),
-        // const CustomDivider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -78,12 +71,26 @@ class LoginSheet extends StackedView<LoginSheetModel> {
         ),
         const CustomDivider(),
         verticalSpaceMedium,
-        const CustomTextFormField(
-            label: "Enter Your Phone Number", hintText: "+91 Mobile Number"),
+        CustomTextFormField(
+            controller: numberController,
+            prefixIcon: const SizedBox(
+              width: 30,
+              child: Center(
+                child: ShowText(text: "+91"),
+              ),
+            ),
+            // validate: loginviewva,
+            keyboardType: const TextInputType.numberWithOptions(),
+            label: "Enter Your Phone Number",
+            hintText: "Mobile Number"),
         verticalSpaceMedium,
         Row(
           children: [
-            Checkbox(value: false, onChanged: (value) {}),
+            Checkbox(
+                value: vm.aceepted,
+                onChanged: (value) {
+                  vm.acceptTnC(value);
+                }),
             const Text("Accept ", style: TextStyle(fontSize: 14)),
             const Text("Terms and Condition",
                 style: TextStyle(
@@ -95,7 +102,7 @@ class LoginSheet extends StackedView<LoginSheetModel> {
         CustomButton(
           title: "Next ->",
           onPressed: () {
-            vm.nextPage();
+            vm.sendOtp(int.parse(numberController.text));
           },
         ),
         // verticalSpaceLarge,
@@ -126,25 +133,27 @@ class LoginSheet extends StackedView<LoginSheetModel> {
           ],
         ),
         verticalSpaceMedium,
-        const ShowText(
+        ShowText(
             textAlign: TextAlign.center,
+            maxLines: 2,
             text:
-                "Please enter the 4 digital verification code sent to your mobile  number +91-7587329682 via SMS"),
+                "Please enter the 4 digital verification code sent to your mobile  number +91-${numberInputController.text} via SMS"),
         verticalSpaceMedium,
         Pinput(
           // You can pass your own SmsRetriever implementation based on any package
           // in this example we are using the SmartAuth
           // smsRetriever: smsRetriever,
-          // controller: pinController,
-          // focusNode: focusNode,
+          controller: otpInputController,
+          focusNode: otpInputFocusNode,
           // defaultPinTheme: defaultPinTheme,
           separatorBuilder: (index) => const SizedBox(width: 8),
-          validator: (value) {
-            return value == '2222' ? null : 'Pin is incorrect';
-          },
+          // validator: (value) {
+          //   return vm.validatedOtp! ? "Success" : 'Pin is incorrect';
+          // },
           hapticFeedbackType: HapticFeedbackType.lightImpact,
           onCompleted: (pin) {
-            debugPrint('onCompleted: $pin');
+            vm.validateOtp(
+                num.parse(pin), num.parse(numberInputController.text));
           },
           onChanged: (value) {
             debugPrint('onChanged: $value');
@@ -185,7 +194,7 @@ class LoginSheet extends StackedView<LoginSheetModel> {
         CustomButton(
           title: "Next ->",
           onPressed: () {
-            vm.nextPage();
+            vm.checkLogin();
           },
         ),
         // verticalSpaceLarge,

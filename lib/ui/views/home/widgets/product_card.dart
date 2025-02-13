@@ -6,8 +6,9 @@ import 'package:oru_phones/ui/views/home/widgets/image.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-
-  const ProductCard({Key? key, required this.product}) : super(key: key);
+  final dynamic vm;
+  const ProductCard({Key? key, required this.product, required this.vm})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +49,17 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              const Positioned(
+              Positioned(
                 top: 8,
                 right: 8,
-                child: Icon(Icons.favorite_border, color: Colors.grey),
+                child: IconButton(
+                    onPressed: () {
+                      vm.isLoggedin
+                          ? vm.likeProduct(product.listingId)
+                          : vm.showBottomSheet();
+                    },
+                    icon:
+                        const Icon(Icons.favorite_border, color: Colors.grey)),
               ),
             ],
           ),
@@ -78,7 +86,7 @@ class ProductCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "₹ ${product.discountedPrice.toStringAsFixed(0)}",
+                  "₹ ${product.discountedPrice}",
                   style: const TextStyle(
                       fontSize: 15, fontWeight: FontWeight.bold),
                 ),

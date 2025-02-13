@@ -21,10 +21,10 @@ class Product with _$Product {
     required String make,
     required String marketingName,
     required bool openForNegotiation,
-    required bool verified,
+    @Default(false) bool verified,
     required String listingId,
     required String status,
-    required String verifiedDate,
+    @Default("") String verifiedDate,
     required String listingDate,
     required String deviceRam,
     required String warranty,
@@ -44,10 +44,10 @@ class Product with _$Product {
 @freezed
 class ProductImage with _$ProductImage {
   const factory ProductImage({
-    required String thumbImage,
-    required String fullImage,
-    required String isVarified,
-    required String option,
+    @Default("") String thumbImage,
+    @Default("") String fullImage,
+    @Default("") String isVarified,
+    @Default("") String option,
     @JsonKey(name: "_id") required String id,
   }) = _ProductImage;
 

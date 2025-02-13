@@ -5,6 +5,9 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:oru_phones/services/api_service.dart';
 import 'package:oru_phones/services/products_service.dart';
 import 'package:oru_phones/services/authentication_service.dart';
+import 'package:oru_phones/services/filters_service.dart';
+import 'package:oru_phones/services/fcm_notification_service.dart';
+import 'package:oru_phones/services/faqs_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -16,6 +19,9 @@ import 'test_helpers.mocks.dart';
   MockSpec<ApiService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ProductsService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<AuthenticationService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<FiltersService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<FcmNotificationService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<FaqsService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -25,6 +31,9 @@ void registerServices() {
   getAndRegisterApiService();
   getAndRegisterProductsService();
   getAndRegisterAuthenticationService();
+  getAndRegisterFiltersService();
+  getAndRegisterFcmNotificationService();
+  getAndRegisterFaqsService();
 // @stacked-mock-register
 }
 
@@ -96,6 +105,27 @@ MockAuthenticationService getAndRegisterAuthenticationService() {
   _removeRegistrationIfExists<AuthenticationService>();
   final service = MockAuthenticationService();
   locator.registerSingleton<AuthenticationService>(service);
+  return service;
+}
+
+MockFiltersService getAndRegisterFiltersService() {
+  _removeRegistrationIfExists<FiltersService>();
+  final service = MockFiltersService();
+  locator.registerSingleton<FiltersService>(service);
+  return service;
+}
+
+MockFcmNotificationService getAndRegisterFcmNotificationService() {
+  _removeRegistrationIfExists<FcmNotificationService>();
+  final service = MockFcmNotificationService();
+  locator.registerSingleton<FcmNotificationService>(service);
+  return service;
+}
+
+MockFaqsService getAndRegisterFaqsService() {
+  _removeRegistrationIfExists<FaqsService>();
+  final service = MockFaqsService();
+  locator.registerSingleton<FaqsService>(service);
   return service;
 }
 // @stacked-mock-create

@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:oru_phones/domain/extensions/extensions.dart';
 import 'package:oru_phones/domain/models/brands/brand.dart';
+import 'package:oru_phones/domain/models/faq_model.dart';
+import 'package:oru_phones/domain/models/filter_model.dart';
 
 import '../domain/models/product.dart';
 
@@ -10,10 +13,11 @@ class ApiService {
 
   /// Fetch products with optional filters
   Future<List<Product>> getProducts({Map<String, dynamic>? filters}) async {
-    final Uri uri = Uri.http(baseUrl, '/filter'); // Adjust API path if needed
+    final Uri uri = Uri.http(baseUrl, '/filter');
     final Map<String, dynamic> body = {
       "filter": filters ?? {} // Default to empty filter
     };
+    "  theees *****************************${jsonEncode(body)}".dp;
 
     final response = await http.post(
       uri,
@@ -68,6 +72,52 @@ class ApiService {
       return OtpResponse.fromJson(jsonResponse);
     } else {
       throw Exception("Failed to send OTP: ${response.body}");
+    }
+  }
+
+  //! Get Filters
+
+  Future<FilterModel?> fetchFilters() async {
+    "fetching Filter".dp;
+    final url = Uri.http(
+        baseUrl, "/showSearchFilters"); // 🔹 Replace with actual API URL
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        "Got dataass ${response.body}";
+
+        final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+
+        return FilterModel.fromJson(jsonResponse);
+      } else {
+        "Failed to load data: ${response.statusCode}".dp;
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching filters: $e");
+      throw Exception(e);
+    }
+  }
+
+  //! FAQ
+
+  Future<List<FAQ>> fetchFAQs() async {
+    try {
+      final response = await http.get(Uri.http(baseUrl, "/faq"));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        "${response.statusCode}".dp;
+        // "$data got faqssssssssssss".dp;
+
+        return FAQResponse.fromJson(data).faqs;
+      } else {
+        throw Exception("Failed to load FAQs: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error fetching FAQs: $e");
     }
   }
 }

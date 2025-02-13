@@ -66,17 +66,6 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
           color: Theme.of(ctx).shadowColor,
           fontSize: 14,
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     const ShowText(
-        //       text: "Sign in to continue",
-        //       fontSize: 18,
-        //     ),
-        //     IconButton(onPressed: () {}, icon: const Icon(Icons.close))
-        //   ],
-        // ),
-        // const CustomDivider(),
         const Spacer(),
         CustomTextFormField(
             controller: numberController,
@@ -93,7 +82,6 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
         verticalSpaceMedium,
         verticalSpaceLarge,
         verticalSpaceLarge,
-
         Row(
           children: [
             Checkbox(

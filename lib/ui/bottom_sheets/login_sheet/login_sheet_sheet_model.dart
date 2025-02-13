@@ -1,15 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:oru_phones/app/app.locator.dart';
+import 'package:oru_phones/app/app.router.dart';
+import 'package:oru_phones/domain/extensions/extensions.dart';
+import 'package:oru_phones/services/authentication_service.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-class LoginSheetModel extends BaseViewModel {
+class LoginSheetModel extends FormViewModel {
+  final _bottomSheetService = locator<BottomSheetService>();
+
+  final _authService = locator<AuthenticationService>();
+  final _navigationService = locator<NavigationService>();
   final PageController pageController = PageController(initialPage: 0);
   int _currentPage = 0;
+  bool? _accepted = false;
+  bool? get aceepted => _accepted;
+  bool? _validOtp = false;
+  bool? get validatedOtp => _validOtp;
 
-  // final List<Widget> pages = [
-  //   const PageWidget(text: "Page 1", color: Colors.red),
-  //   const PageWidget(text: "Page 2", color: Colors.green),
-  //   const PageWidget(text: "Page 3", color: Colors.blue),
-  // ];
+  void acceptTnC(bool? value) {
+    _accepted = value;
+    rebuildUi();
+  }
+
+  void sendOtp(int phone) {
+    if (aceepted!) {
+      _authService.sendOtpRequest(phone);
+      nextPage();
+    } else {}
+  }
+
+  void validateOtp(num otp, num phone) {
+    _authService.validateOtp(phone, otp);
+    _validOtp = true;
+    // nextPage();
+  }
+
+  void updateName(String name) async {
+    "$name updating".dp;
+    debugPrint("updating");
+    String msg = await _authService.updateName(name);
+    if (msg == "success") {
+      _navigationService.replaceWithHomeView();
+    }
+    // _validOtp = true;
+    // nextPage();
+  }
+
+  void checkLogin() {
+    // _navigationService.replaceWithHomeView();
+    _authService.checkLoginStatus();
+    if (_authService.isLoggedin && _authService.user!.userName.isEmpty) {
+      nextPage();
+    } else if (_authService.isLoggedin) {
+      debugPrint(_authService.user!.userName);
+      _bottomSheetService.completeSheet(SheetResponse());
+      _navigationService.replaceWithHomeView();
+    }
+  }
 
   void nextPage() {
     if (_currentPage < 2) {
@@ -21,6 +69,20 @@ class LoginSheetModel extends BaseViewModel {
       );
       rebuildUi();
     }
+  }
+
+  String? numberValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a number';
+    }
+    final number = num.tryParse(value);
+    if (number == null) {
+      return 'Please enter a valid number';
+    }
+    if (number < 0) {
+      return 'Number cannot be negative';
+    }
+    return null;
   }
 
   void previousPage() {

@@ -485,10 +485,10 @@ class _$ProductImpl implements _Product {
       required this.make,
       required this.marketingName,
       required this.openForNegotiation,
-      required this.verified,
+      this.verified = false,
       required this.listingId,
       required this.status,
-      required this.verifiedDate,
+      this.verifiedDate = "",
       required this.listingDate,
       required this.deviceRam,
       required this.warranty,
@@ -541,12 +541,14 @@ class _$ProductImpl implements _Product {
   @override
   final bool openForNegotiation;
   @override
+  @JsonKey()
   final bool verified;
   @override
   final String listingId;
   @override
   final String status;
   @override
+  @JsonKey()
   final String verifiedDate;
   @override
   final String listingDate;
@@ -694,10 +696,10 @@ abstract class _Product implements Product {
       required final String make,
       required final String marketingName,
       required final bool openForNegotiation,
-      required final bool verified,
+      final bool verified,
       required final String listingId,
       required final String status,
-      required final String verifiedDate,
+      final String verifiedDate,
       required final String listingDate,
       required final String deviceRam,
       required final String warranty,
@@ -920,22 +922,26 @@ class __$$ProductImageImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProductImageImpl implements _ProductImage {
   const _$ProductImageImpl(
-      {required this.thumbImage,
-      required this.fullImage,
-      required this.isVarified,
-      required this.option,
+      {this.thumbImage = "",
+      this.fullImage = "",
+      this.isVarified = "",
+      this.option = "",
       @JsonKey(name: "_id") required this.id});
 
   factory _$ProductImageImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductImageImplFromJson(json);
 
   @override
+  @JsonKey()
   final String thumbImage;
   @override
+  @JsonKey()
   final String fullImage;
   @override
+  @JsonKey()
   final String isVarified;
   @override
+  @JsonKey()
   final String option;
   @override
   @JsonKey(name: "_id")
@@ -984,10 +990,10 @@ class _$ProductImageImpl implements _ProductImage {
 
 abstract class _ProductImage implements ProductImage {
   const factory _ProductImage(
-      {required final String thumbImage,
-      required final String fullImage,
-      required final String isVarified,
-      required final String option,
+      {final String thumbImage,
+      final String fullImage,
+      final String isVarified,
+      final String option,
       @JsonKey(name: "_id") required final String id}) = _$ProductImageImpl;
 
   factory _ProductImage.fromJson(Map<String, dynamic> json) =
