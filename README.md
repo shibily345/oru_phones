@@ -20,7 +20,8 @@ OruPhones is a Flutter-based application designed to demonstrate authentication,
 - **Dart** (Programming Language)
 - **Firebase Cloud Messaging (FCM)** (Push Notifications)
 - **Stacked (State Management)**
-- **Dio (HTTP Requests & Error Handling)**
+- **http (HTTP Requests & Error Handling)**
+- **ScreenUtil (Responsive App)**
 - **Shared Preferences (Local Storage & Authentication Persistence)**
 
 
