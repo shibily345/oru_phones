@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:oru_phones/domain/extensions/extensions.dart';
 
 class FcmNotificationService {
   static final FirebaseMessaging _firebaseMessaging =
@@ -8,7 +9,6 @@ class FcmNotificationService {
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> initialize() async {
-    // Request permission for notifications
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
@@ -19,7 +19,6 @@ class FcmNotificationService {
       print('User granted permission');
     }
 
-    // Initialize local notifications
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings iosSettings =
@@ -34,12 +33,13 @@ class FcmNotificationService {
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-    // Handle foreground messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       _showNotification(message);
     });
 
-    // Handle background messages
+    final fcmToken = await _firebaseMessaging.getToken();
+    "token:  $fcmToken".dp;
+
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
