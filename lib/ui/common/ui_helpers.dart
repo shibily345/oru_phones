@@ -1,33 +1,34 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-const double _tinySize = 5.0;
-const double _smallSize = 10.0;
-const double _mediumSize = 25.0;
-const double _largeSize = 50.0;
-const double _massiveSize = 120.0;
+double _tinySize = 5.0;
+double _smallSize = 10.0;
+double _mediumSize = 25.0;
+double _largeSize = 50.0;
+double _massiveSize = 120.0;
 
-const Widget horizontalSpaceTiny = SizedBox(width: _tinySize);
-const Widget horizontalSpaceSmall = SizedBox(width: _smallSize);
-const Widget horizontalSpaceMedium = SizedBox(width: _mediumSize);
-const Widget horizontalSpaceLarge = SizedBox(width: _largeSize);
+Widget horizontalSpaceTiny = SizedBox(width: _tinySize.w);
+Widget horizontalSpaceSmall = SizedBox(width: _smallSize.w);
+Widget horizontalSpaceMedium = SizedBox(width: _mediumSize.w);
+Widget horizontalSpaceLarge = SizedBox(width: _largeSize.w);
 
-const Widget verticalSpaceTiny = SizedBox(height: _tinySize);
-const Widget verticalSpaceSmall = SizedBox(height: _smallSize);
-const Widget verticalSpaceMedium = SizedBox(height: _mediumSize);
-const Widget verticalSpaceLarge = SizedBox(height: _largeSize);
-const Widget verticalSpaceMassive = SizedBox(height: _massiveSize);
+Widget verticalSpaceTiny = SizedBox(height: _tinySize.h);
+Widget verticalSpaceSmall = SizedBox(height: _smallSize.h);
+Widget verticalSpaceMedium = SizedBox(height: _mediumSize.h);
+Widget verticalSpaceLarge = SizedBox(height: _largeSize.h);
+Widget verticalSpaceMassive = SizedBox(height: _massiveSize.h);
 
-Widget spacedDivider = const Column(
+Widget spacedDivider = Column(
   children: <Widget>[
     verticalSpaceMedium,
-    Divider(color: Colors.blueGrey, height: 5.0),
+    const Divider(color: Colors.blueGrey, height: 5.0),
     verticalSpaceMedium,
   ],
 );
 
-Widget verticalSpace(double height) => SizedBox(height: height);
+Widget verticalSpace(double height) => SizedBox(height: height.h);
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;

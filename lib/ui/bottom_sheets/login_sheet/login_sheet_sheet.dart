@@ -42,7 +42,7 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
         height: 380,
         child: PageView(
           controller: viewModel.pageController,
-          physics: const NeverScrollableScrollPhysics(), // Disable swipe
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             numberSection(viewModel, context, numberInputController),
             otpSection(viewModel),
@@ -79,7 +79,6 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
                 child: ShowText(text: "+91"),
               ),
             ),
-            // validate: loginviewva,
             keyboardType: const TextInputType.numberWithOptions(),
             label: "Enter Your Phone Number",
             hintText: "Mobile Number"),
@@ -105,7 +104,6 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
             vm.sendOtp(int.parse(numberController.text));
           },
         ),
-        // verticalSpaceLarge,
       ],
     );
   }
@@ -117,7 +115,6 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
                 onPressed: () {
@@ -140,16 +137,9 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
                 "Please enter the 4 digital verification code sent to your mobile  number +91-${numberInputController.text} via SMS"),
         verticalSpaceMedium,
         Pinput(
-          // You can pass your own SmsRetriever implementation based on any package
-          // in this example we are using the SmartAuth
-          // smsRetriever: smsRetriever,
           controller: otpInputController,
           focusNode: otpInputFocusNode,
-          // defaultPinTheme: defaultPinTheme,
           separatorBuilder: (index) => const SizedBox(width: 8),
-          // validator: (value) {
-          //   return vm.validatedOtp! ? "Success" : 'Pin is incorrect';
-          // },
           hapticFeedbackType: HapticFeedbackType.lightImpact,
           onCompleted: (pin) {
             vm.validateOtp(
@@ -165,39 +155,20 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
                 margin: const EdgeInsets.only(bottom: 9),
                 width: 22,
                 height: 1,
-                // color: focusedBorderColor,
               ),
             ],
           ),
-          // focusedPinTheme: defaultPinTheme.copyWith(
-          //   decoration: defaultPinTheme.decoration!.copyWith(
-          //     borderRadius: BorderRadius.circular(8),
-          //     border: Border.all(color: focusedBorderColor),
-          //   ),
-          // ),
-          // submittedPinTheme: defaultPinTheme.copyWith(
-          //   decoration: defaultPinTheme.decoration!.copyWith(
-          //     color: fillColor,
-          //     borderRadius: BorderRadius.circular(19),
-          //     border: Border.all(color: focusedBorderColor),
-          //   ),
-          // ),
-          // errorPinTheme: defaultPinTheme.copyBorderWith(
-          //   border: Border.all(color: Colors.redAccent),
-          // ),
         ),
         verticalSpaceMedium,
         const ShowText(text: "Didin't Recive Otp"),
         const ShowText(text: "Recent it in 23 second"),
         verticalSpaceLarge,
-
         CustomButton(
           title: "Next ->",
           onPressed: () {
             vm.checkLogin();
           },
         ),
-        // verticalSpaceLarge,
       ],
     );
   }
@@ -207,15 +178,6 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // AppBar(
-        //   backgroundColor: Colors.white,
-        //   flexibleSpace: const ShowText(text: "Sign in to continue"),
-        //   automaticallyImplyLeading: false,
-        //   actions: [
-        //     IconButton(onPressed: () {}, icon: const Icon(Icons.close))
-        //   ],
-        // ),
-        // const CustomDivider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -228,15 +190,19 @@ class LoginSheet extends StackedView<LoginSheetModel> with $LoginSheet {
         ),
         const CustomDivider(),
         verticalSpaceMedium,
-        const CustomTextFormField(
-            label: "Enter Tell Us Your Nmae", hintText: "Enter Your Name"),
+        CustomTextFormField(
+            controller: nameInputController,
+            label: "Enter Tell Us Your Nmae",
+            hintText: "Enter Your Name"),
         verticalSpaceMedium,
         verticalSpaceMedium,
         const Spacer(),
         CustomButton(
           title: "Confirm Name",
           onPressed: () {
-            // vm.nextPage();
+            if (nameInputController.text.isNotEmpty) {
+              vm.updateName(nameInputController.text);
+            }
           },
         ),
         verticalSpaceLarge,

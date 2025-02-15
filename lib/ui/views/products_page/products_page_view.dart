@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oru_phones/app/app.locator.dart';
 import 'package:oru_phones/ui/common/ui_helpers.dart';
 import 'package:oru_phones/ui/views/home/widgets/product_card.dart';
 import 'package:stacked/stacked.dart';
@@ -15,8 +16,8 @@ class ProductsPageView extends StackedView<ProductsPageViewModel> {
     Widget? child,
   ) {
     return ViewModelBuilder<ProductsPageViewModel>.reactive(
-        viewModelBuilder: () => ProductsPageViewModel(),
-        onViewModelReady: (viewModel) => viewModel.initScroll(),
+        disposeViewModel: false,
+        viewModelBuilder: () => locator<ProductsPageViewModel>(),
         builder: (context, model, child) {
           return Scaffold(
               appBar: AppBar(),
@@ -31,8 +32,14 @@ class ProductsPageView extends StackedView<ProductsPageViewModel> {
                       sliver: SliverGrid.builder(
                         itemCount: model.products.length,
                         itemBuilder: (context, index) {
-                          return ProductCard(
-                              vm: model, product: model.products[index]);
+                          int realIndex = index - (index ~/ 8);
+
+                          if ((index + 1) % 8 == 0) {
+                            return _adCard(index);
+                          } else {
+                            return ProductCard(
+                                product: model.products[realIndex]);
+                          }
                         },
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -54,6 +61,10 @@ class ProductsPageView extends StackedView<ProductsPageViewModel> {
               ));
         });
   }
+
+  Image _adCard(int index) => Image.asset((index ~/ 8) % 2 == 0
+      ? 'assets/images/Sell.png'
+      : 'assets/images/Compare.png');
 
   SliverToBoxAdapter _buildDealsAndSort(
       ProductsPageViewModel viewModel, BuildContext context) {

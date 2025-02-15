@@ -16,7 +16,7 @@ class StartupViewModel extends BaseViewModel {
   final _faqServices = locator<FaqsService>();
   final _fcmService = locator<FcmNotificationService>();
 
-  // Place anything here that needs to happen before we get into the application
+  
   Future runStartupLogic() async {
     await Future.delayed(const Duration(seconds: 3));
     await _productService.getProducts();
@@ -25,8 +25,8 @@ class StartupViewModel extends BaseViewModel {
     await _filterServices.getFilter();
     await _faqServices.getFaqs();
     await _fcmService.initialize();
-    // This is where you can make decisions on where your app should navigate when
-    // you have custom startup logic
+    
+    
 
     _navigationService.replaceWithHomeView();
   }

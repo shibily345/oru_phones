@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_local_notifications: ^18.0.1
+  flutter_screenutil: ^5.9.3
   freezed_annotation: ^2.4.1
   json_annotation: null
   lottie: ^3.3.1

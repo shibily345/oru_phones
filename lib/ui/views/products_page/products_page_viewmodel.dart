@@ -11,10 +11,11 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class ProductsPageViewModel extends BaseViewModel {
-  static final ProductsPageViewModel _instance =
-      ProductsPageViewModel._internal();
-  factory ProductsPageViewModel() => _instance;
-  ProductsPageViewModel._internal();
+  final ScrollController scrollController = ScrollController();
+
+  ProductsPageViewModel() {
+    scrollController.addListener(_onScroll);
+  }
 
   final _productService = locator<ProductsService>();
   SelectedFilterModel _filter = SelectedFilterModel();
@@ -23,38 +24,52 @@ class ProductsPageViewModel extends BaseViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   final _navigationService = locator<NavigationService>();
   final _authServices = locator<AuthenticationService>();
-
+  List<dynamic> _likedPs = [];
+  List<dynamic> get likedPs => _likedPs;
   List<Product> _products = locator<ProductsService>().products;
 
   List<Product> get products => _products;
   bool filterApplyed = false;
   bool sortApplyed = false;
+  bool isloading = false;
   final List<Product> _productFiltered = [];
   List<Product> get productFiltered => _productFiltered;
-  final ScrollController scrollController = ScrollController();
+
   int _currentPage = 1;
-  final int _perPage = 10;
 
   void initScroll() {
+    "check working".dp;
+
     scrollController.addListener(_onScroll);
   }
 
+  void initLikedp() {
+    var liked = _authServices.likedProducts ?? [];
+    _likedPs = List.from(liked);
+  }
+
   void _onScroll() {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isBusy) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 100) {
+      print("🔄 Scrolled to Bottom - Fetching More Data...");
       _loadMoreProducts();
     }
   }
 
+  bool containsValue(dynamic value) {
+    return _likedPs.contains(value);
+  }
+
   Future<void> _loadMoreProducts() async {
+    "Loading More......".dp;
     setBusy(true);
 
-    await Future.delayed(const Duration(seconds: 2)); // Simulating API Call
+    await Future.delayed(const Duration(seconds: 2));
 
     _currentPage++;
     _products.addAll(await _productService.getProductsWithFilters(
         _filter.copyWith(page: _currentPage), null));
+    rebuildUi();
     setBusy(false);
   }
 
@@ -75,10 +90,35 @@ class ProductsPageViewModel extends BaseViewModel {
     if (filterApplyed) {
       "successfully aplied ".dp;
     }
-    // _products = _productFiltered;
+
     rebuildUi();
     notifyListeners();
     setBusy(false);
+  }
+
+  Future<void> toggleLike(String productId) async {
+    if (_likedPs.contains(productId)) {
+      _likedPs.remove(productId);
+    } else {
+      _likedPs.add(productId);
+    }
+
+    notifyListeners();
+
+    try {
+      await _authServices.updateFavs(productId);
+      _authServices.checkLoginStatus();
+    } catch (e) {
+      print("Error updating like status: $e");
+    }
+  }
+
+  void showLoginBottomSheet() {
+    _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.login,
+      title: ksHomeBottomSheetTitle,
+      description: ksHomeBottomSheetDescription,
+    );
   }
 
   void rebuildWithSort(Map<String, dynamic> sort) async {

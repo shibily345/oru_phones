@@ -48,7 +48,6 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
     );
   }
 
-  // Header with title and close button
   Widget _buildHeader(FiltersSheetModel vm) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -68,7 +67,6 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
     );
   }
 
-  // Left-side filter categories
   Widget _buildFilterCategories(FiltersSheetModel vm) {
     return SizedBox(
       width: 120,
@@ -92,7 +90,6 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
     );
   }
 
-  // Right-side options for selected filter
   Widget _buildFilterOptions(FiltersSheetModel vm) {
     return Expanded(
       child: Padding(
@@ -111,8 +108,6 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
                   vm.removeFilter(vm.selectedFilter, option);
                 } else {
                   vm.setFilter(vm.selectedFilter, option);
-
-                  // selectedValues[selectedFilter]?.remove(option);
                 }
               },
             );
@@ -122,7 +117,6 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
     );
   }
 
-  // Bottom buttons: Clear All & Apply
   Widget _buildBottomButtons(FiltersSheetModel vm) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),

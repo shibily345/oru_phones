@@ -24,39 +24,43 @@ class LoginSheetModel extends FormViewModel {
   }
 
   void sendOtp(int phone) {
+    setBusy(true);
     if (aceepted!) {
       _authService.sendOtpRequest(phone);
-      nextPage();
     } else {}
+    nextPage();
+    setBusy(false);
   }
 
   void validateOtp(num otp, num phone) {
-    _authService.validateOtp(phone, otp);
-    _validOtp = true;
-    // nextPage();
+    setBusy(true);
+    _authService.validateOtp(phone, otp).then((_) {
+      setBusy(false);
+      _validOtp = true;
+    });
   }
 
   void updateName(String name) async {
+    setBusy(true);
     "$name updating".dp;
     debugPrint("updating");
     String msg = await _authService.updateName(name);
     if (msg == "success") {
-      _navigationService.replaceWithHomeView();
+      _bottomSheetService.completeSheet(SheetResponse());
     }
-    // _validOtp = true;
-    // nextPage();
+    setBusy(false);
   }
 
   void checkLogin() {
-    // _navigationService.replaceWithHomeView();
+    setBusy(true);
     _authService.checkLoginStatus();
     if (_authService.isLoggedin && _authService.user!.userName.isEmpty) {
       nextPage();
     } else if (_authService.isLoggedin) {
       debugPrint(_authService.user!.userName);
-      _bottomSheetService.completeSheet(SheetResponse());
       _navigationService.replaceWithHomeView();
     }
+    setBusy(false);
   }
 
   void nextPage() {

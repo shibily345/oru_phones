@@ -9,14 +9,11 @@ import 'package:oru_phones/domain/models/filter_model.dart';
 import '../domain/models/product.dart';
 
 class ApiService {
-  final String baseUrl = '40.90.224.241:5000'; // Base API URL
+  final String baseUrl = '40.90.224.241:5000';
 
-  /// Fetch products with optional filters
   Future<List<Product>> getProducts({Map<String, dynamic>? filters}) async {
     final Uri uri = Uri.http(baseUrl, '/filter');
-    final Map<String, dynamic> body = {
-      "filter": filters ?? {} // Default to empty filter
-    };
+    final Map<String, dynamic> body = {"filter": filters ?? {}};
     "  theees *****************************${jsonEncode(body)}".dp;
 
     final response = await http.post(
@@ -37,7 +34,7 @@ class ApiService {
   }
 
   Future<List<Brand>> getBrands() async {
-    final url = Uri.http(baseUrl, "/makeWithImages"); // Update URL
+    final url = Uri.http(baseUrl, "/makeWithImages");
 
     final response = await http.get(url);
 
@@ -53,8 +50,7 @@ class ApiService {
   //!- Authentication
 
   Future<OtpResponse> sendOtp(int countryCode, int mobileNumber) async {
-    final url =
-        Uri.http(baseUrl, "/login/otpCreate"); // Replace with actual API URL
+    final url = Uri.http(baseUrl, "/login/otpCreate");
 
     final Map<String, dynamic> requestBody = {
       "countryCode": countryCode,
@@ -79,8 +75,7 @@ class ApiService {
 
   Future<FilterModel?> fetchFilters() async {
     "fetching Filter".dp;
-    final url = Uri.http(
-        baseUrl, "/showSearchFilters"); // 🔹 Replace with actual API URL
+    final url = Uri.http(baseUrl, "/showSearchFilters");
 
     try {
       final response = await http.get(url);
@@ -110,7 +105,6 @@ class ApiService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
         "${response.statusCode}".dp;
-        // "$data got faqssssssssssss".dp;
 
         return FAQResponse.fromJson(data).faqs;
       } else {

@@ -10,10 +10,8 @@ class Product with _$Product {
     required String deviceCondition,
     required String listedBy,
     required String deviceStorage,
-    @Default([]) List<ProductImage> images, // ✅ Avoid null list errors
-    @JsonKey(defaultValue: null)
-    DefaultImage? defaultImage, // ✅ Nullable object
-
+    @Default([]) List<ProductImage> images,
+    @JsonKey(defaultValue: null) DefaultImage? defaultImage,
     required String listingState,
     required String listingLocation,
     required String listingLocality,
@@ -28,13 +26,12 @@ class Product with _$Product {
     required String listingDate,
     required String deviceRam,
     required String warranty,
-    @Default(0) int originalPrice, // ✅ Avoid null cast to int error
-    @Default(0) int discountedPrice, // ✅ Avoid null cast to int error
-
+    @Default(0) int originalPrice,
+    @Default(0) int discountedPrice,
     required String imagePath,
     required String createdAt,
     required String updatedAt,
-    ProductLocation? location, // ✅ Allow `null` Location object
+    ProductLocation? location,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) =>

@@ -9,14 +9,10 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class FiltersSheetModel extends BaseViewModel {
-  // static final FiltersSheetModel _instance = FiltersSheetModel._internal();
-  // factory FiltersSheetModel() => _instance;
-  // FiltersSheetModel._internal();
   final _filterServices = locator<FiltersService>();
   final _navServ = locator<NavigationService>();
   final _bottomSheetService = locator<BottomSheetService>();
-  // final _bottomSheetService = locator<BottomSheetService>();
-  // final HomeViewModel _homeViewModel = locator<HomeViewModel>();
+
   final ProductsPageViewModel _productViewModel =
       locator<ProductsPageViewModel>();
 
@@ -45,7 +41,6 @@ class FiltersSheetModel extends BaseViewModel {
   }
 
   void applyFilter(String? page) async {
-    // "Getting Products WIth Filters: $filter".dp;
     _bottomSheetService.completeSheet(SheetResponse(confirmed: true));
     _productViewModel.rebuildWithFilter(filter);
     if (page != null && page == "home") {

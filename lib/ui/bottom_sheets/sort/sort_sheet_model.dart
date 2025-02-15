@@ -8,8 +8,6 @@ import 'package:stacked_services/stacked_services.dart';
 class SortSheetModel extends BaseViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   final _navServ = locator<NavigationService>();
-  // Map<String, dynamic> _sort = {};
-  // Map<String, dynamic> get sort => _sort;
 
   final ProductsPageViewModel _productsPageViewModel =
       locator<ProductsPageViewModel>();
@@ -24,11 +22,6 @@ class SortSheetModel extends BaseViewModel {
     "Latest",
     "Distance"
   ];
-  // void preSort(Map<String, dynamic>? data) {
-  //   if (data != null) {
-  //     _sort = data;
-  //   }
-  // }
 
   void selectIndex(int? index) {
     selectedIndex = index;

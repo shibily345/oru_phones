@@ -84,6 +84,8 @@ class AuthenticationService {
         _isLoggedin = true;
         _user = UserModel.fromJson(data);
         if (_user != null) {
+          "${_user!.user.userName} ........................... name is here bro......"
+              .dp;
           _saveCrsfToken(_user!.csrfToken);
           _likedProducts = _user!.user.favListings;
           "$likedProducts".dp;
@@ -153,7 +155,7 @@ class AuthenticationService {
     final Map<String, dynamic> requestBody = {"listingId": id, "isFav": true};
     try {
       final response = await http.post(
-        Uri.http(baseUrl, "/update"),
+        Uri.http(baseUrl, "/favs"),
         body: jsonEncode(requestBody),
         headers: {
           'X-Csrf-Token': csrfToken,

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oru_phones/ui/common/ui_helpers.dart';
 import 'package:oru_phones/ui/views/home/home_viewmodel.dart';
 import 'package:oru_phones/ui/views/home/widgets/default.dart';
@@ -14,101 +15,117 @@ class FooterDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.amber),
-        width: screenWidth(context),
-        // height: screenHeight(context) * 0.76,
-        child: Column(
-          children: [
-            verticalSpaceLarge,
-            const ShowText(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              textAlign: TextAlign.center,
-              text: "Get Notified About Our \nLatest Offers and Price Drops",
-              maxLines: 2,
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Enter your email here",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+      child: Stack(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              verticalSpaceLarge,
+              Container(
+                decoration: const BoxDecoration(color: Colors.amber),
+                child: Column(
+                  children: [
+                    verticalSpaceLarge,
+                    const ShowText(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      textAlign: TextAlign.center,
+                      text:
+                          "Get Notified About Our \nLatest Offers and Price Drops",
+                      maxLines: 2,
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 60.w, vertical: 25.h),
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: "Enter your email here",
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 16),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                            child: const Text(
+                              "Send",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    child: const Text(
-                      "Send",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Stack(
-              children: [
-                Container(
-                  color: Colors.white,
-                  height: 1200,
-                  child: Container(
-                    width: screenWidth(context),
-                    height: 390,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 56, 56, 56),
-                    ),
-                    child: Column(
-                      children: [
-                        Image.asset('assets/images/Frame.png'),
-                        verticalSpaceMedium,
-                        const ShowText(
-                          color: Colors.white,
-                          text: "Invate A Frind",
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        verticalSpace(350),
-                        const ShowText(
-                          color: Colors.white,
-                          text: "Or Share",
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        Image.asset(
-                          'assets/images/share.png',
-                          width: 250,
-                        )
-                      ],
+              Image.asset('assets/images/Frame.png'),
+              Container(
+                width: screenWidth(context),
+                color: const Color.fromARGB(255, 40, 40, 40),
+                height: 200.w,
+                child: const Padding(
+                  padding: EdgeInsets.only(top: 18.0),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ShowText(
+                      color: Colors.white,
+                      text: "Invate A Frind",
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
-                Positioned(
-                    bottom: 290,
-                    child: Image.asset(
-                      'assets/images/Footer Deal.png',
-                      width: 450,
-                    )),
-              ],
+              ),
+              verticalSpaceMedium,
+              const ShowText(
+                color: Colors.white,
+                text: "Or Share",
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
+              Container(
+                width: screenWidth(context),
+                height: 200.h,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    const Spacer(),
+                    Image.asset(
+                      'assets/images/share.png',
+                      width: 250.w,
+                    ),
+                    verticalSpaceLarge
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 5.h,
+            left: 20.w,
+            child: Image.asset(
+              'assets/images/Footer Deal.png',
+              width: 400.w,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -125,10 +142,9 @@ class MainSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: 300,
+        height: 260.h,
         child: Column(
           children: [
-            verticalSpace(30),
             CarouselSlider(
               items: viewModel.images.map((imagePath) {
                 return ClipRRect(
@@ -138,7 +154,7 @@ class MainSlider extends StatelessWidget {
                 );
               }).toList(),
               options: CarouselOptions(
-                height: 200,
+                height: 200.h,
                 autoPlay: true,
                 enlargeCenterPage: true,
                 viewportFraction: 0.9,
@@ -147,8 +163,6 @@ class MainSlider extends StatelessWidget {
                 },
               ),
             ),
-
-            // Dots Indicator
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: viewModel.images.asMap().entries.map((entry) {
@@ -196,17 +210,20 @@ class AppBarMain extends StatelessWidget {
         children: [
           Image.asset(
             "assets/images/logo.png",
-            height: 30,
-            width: 50,
+            height: 30.h,
+            width: 50.w,
           ),
           Row(
             children: [
               const Text("India", style: TextStyle(color: Colors.black)),
-              const SizedBox(width: 5),
+              SizedBox(width: 5.w),
               const Icon(Icons.location_on, color: Colors.black),
-              const SizedBox(width: 10),
+              SizedBox(width: 10.w),
               vm.isLoggedin
-                  ? const SizedBox()
+                  ? IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.notifications_none_outlined),
+                    )
                   : ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.amber,
@@ -216,7 +233,6 @@ class AppBarMain extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // vm.showBottomSheet();
                         vm.goToLogin();
                       },
                       child: const Text("Login"),
@@ -239,38 +255,85 @@ class DrawerMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
           verticalSpaceLarge,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-            child: Row(
-              children: [
-                Image.asset(
-                  "assets/images/logo.png",
-                  height: 30,
-                  width: 80,
-                ),
-                const Spacer(),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.close))
-              ],
+          verticalSpaceSmall,
+          Container(
+            color: const Color.fromARGB(255, 239, 239, 239),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10, top: 20),
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/images/logo.png",
+                    height: 30,
+                    width: 80,
+                  ),
+                  const Spacer(),
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+                ],
+              ),
             ),
           ),
+          !vm.isLoggedin
+              ? const SizedBox()
+              : Container(
+                  color: const Color.fromARGB(255, 239, 239, 239),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 25,
+                          backgroundImage: AssetImage(
+                            "assets/images/profile.jpg",
+                          ),
+                        ),
+                        horizontalSpaceSmall,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ShowText(
+                              text: vm.user.userName,
+                              color: Colors.black,
+                              fontSize: 22,
+                            ),
+                            ShowText(
+                              text: "joined: ${vm.user.createdDate}",
+                              color: Colors.black.withAlpha(80),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+          verticalSpaceMedium,
           vm.isLoggedin
               ? const SizedBox()
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomButton(
+                    borderRadius: 40,
+                    color: const Color.fromARGB(255, 1, 63, 114),
+                    elevation: 3,
                     title: "Login/Signup",
                     onPressed: () {
-                      vm.showBottomSheet();
+                      vm.showLoginBottomSheet();
                     },
                   ),
                 ),
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: CustomButton(title: "Sell Your Phone"),
+            child: CustomButton(
+              textColor: Colors.black,
+              title: "Sell Your Phone",
+              color: Colors.amber,
+              borderRadius: 40,
+              elevation: 3,
+            ),
           ),
           !vm.isLoggedin
               ? const SizedBox()
@@ -280,19 +343,44 @@ class DrawerMain extends StatelessWidget {
                   onTap: () {
                     vm.logout();
                   },
-                )
-          // _buildDrawerItem(Icons.home, "Home", () {
-          //   Navigator.pop(context);
-          // }),
-          // _buildDrawerItem(Icons.person, "Profile", () {
-          //   Navigator.pop(context);
-          // }),
-          // _buildDrawerItem(Icons.settings, "Settings", () {
-          //   Navigator.pop(context);
-          // }),
-          // _buildDrawerItem(Icons.logout, "Logout", () {
-          //   Navigator.pop(context);
-          // }),
+                ),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: vm.items.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.1,
+              ),
+              itemBuilder: (context, index) {
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: Colors.black26),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(vm.items[index]["icon"],
+                          size: 20, color: Colors.black),
+                      const SizedBox(height: 4),
+                      Text(
+                        vm.items[index]["label"],
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          )
         ],
       ),
     );
@@ -309,16 +397,14 @@ class SellButton extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: FloatingActionButton.extended(
-        onPressed: () {
-          // Action on button tap
-        },
+        onPressed: () {},
         label: const Row(
           children: [
             Text(
               "Sell",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 20,
                 color: Colors.amber,
               ),
             ),
@@ -326,7 +412,7 @@ class SellButton extends StatelessWidget {
             Icon(
               Icons.add,
               color: Colors.amber,
-              size: 18,
+              size: 28,
             ),
           ],
         ),
@@ -352,13 +438,12 @@ class SearchHead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
-      pinned: true, // Keeps search and buttons visible
+      pinned: true,
       delegate: _SliverAppBarDelegate(
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 4.0.h),
               child: TextField(
                 controller: controller,
                 decoration: InputDecoration(
@@ -388,7 +473,7 @@ class SearchHead extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: viewModel.options.map((option) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
+                    padding: EdgeInsets.only(left: 5.0.w),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -397,8 +482,8 @@ class SearchHead extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(color: Colors.grey.shade400),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 6.h),
                       ),
                       onPressed: () {},
                       child: Text(option, style: const TextStyle(fontSize: 14)),
@@ -407,7 +492,6 @@ class SearchHead extends StatelessWidget {
                 }).toList(),
               ),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -420,27 +504,23 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate({required this.child});
 
   @override
-  double get minExtent => 170; // Minimum height when collapsed
+  double get minExtent => 150;
   @override
-  double get maxExtent => 170; // Maximum height when expanded
+  double get maxExtent => 150;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return ClipRRect(
-      // borderRadius: BorderRadius.circular(20), // Rounded Corners
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Blur Effect
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           width: screenWidth(context),
-          height: 260,
-          padding: const EdgeInsets.all(16),
+          height: 220.h,
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color:
-                Colors.white.withOpacity(0.8), // Transparent White Background
-            // borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-                color: Colors.white.withOpacity(0.8)), // Glass Border
+            color: Colors.white.withOpacity(0.8),
+            border: Border.all(color: Colors.white.withOpacity(0.8)),
           ),
           child: child,
         ),

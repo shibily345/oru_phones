@@ -21,7 +21,7 @@ class LoginViewModel extends FormViewModel {
   }
 
   final PageController pageController = PageController(initialPage: 0);
-  int _currentPage = 0;
+  int currentPage = 0;
   bool? _accepted = false;
   bool? get aceepted => _accepted;
   bool? _validOtp = false;
@@ -33,30 +33,35 @@ class LoginViewModel extends FormViewModel {
   }
 
   void sendOtp(int phone) {
+    setBusy(true);
     if (aceepted!) {
       _authService.sendOtpRequest(phone);
-      nextPage();
     } else {}
+    nextPage();
+    setBusy(false);
   }
 
   void validateOtp(num otp, num phone) {
-    _authService.validateOtp(phone, otp);
-    _validOtp = true;
-    // nextPage();
+    setBusy(true);
+    _authService.validateOtp(phone, otp).then((_) {
+      setBusy(false);
+      _validOtp = true;
+    });
   }
 
   void updateName(String name) async {
+    setBusy(true);
     "$name updating".dp;
     debugPrint("updating");
     String msg = await _authService.updateName(name);
     if (msg == "success") {
       _navigationService.replaceWithHomeView();
     }
-    // _validOtp = true;
-    // nextPage();
+    setBusy(false);
   }
 
   void checkLogin() {
+    setBusy(true);
     _authService.checkLoginStatus();
     if (_authService.isLoggedin && _authService.user!.userName.isEmpty) {
       nextPage();
@@ -64,13 +69,14 @@ class LoginViewModel extends FormViewModel {
       debugPrint(_authService.user!.userName);
       _navigationService.replaceWithHomeView();
     }
+    setBusy(false);
   }
 
   void nextPage() {
-    if (_currentPage < 2) {
-      _currentPage++;
+    if (currentPage < 2) {
+      currentPage++;
       pageController.animateToPage(
-        _currentPage,
+        currentPage,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
@@ -93,10 +99,10 @@ class LoginViewModel extends FormViewModel {
   }
 
   void previousPage() {
-    if (_currentPage > 0) {
-      _currentPage--;
+    if (currentPage > 0) {
+      currentPage--;
       pageController.animateToPage(
-        _currentPage,
+        currentPage,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );

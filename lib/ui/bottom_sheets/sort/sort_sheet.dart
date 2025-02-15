@@ -19,7 +19,6 @@ class SortSheet extends StackedView<SortSheetModel> {
     SortSheetModel viewModel,
     Widget? child,
   ) {
-    // viewModel.preSort(request.data);
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -28,7 +27,6 @@ class SortSheet extends StackedView<SortSheetModel> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -46,8 +44,6 @@ class SortSheet extends StackedView<SortSheetModel> {
             ),
           ),
           const Divider(),
-
-          // List of Options
           ListView.builder(
             shrinkWrap: true,
             itemCount: viewModel.options.length,
@@ -81,10 +77,7 @@ class SortSheet extends StackedView<SortSheetModel> {
               );
             },
           ),
-
           const Divider(),
-
-          // Buttons (Clear & Apply)
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(

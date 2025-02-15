@@ -24,20 +24,41 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
     Widget? child,
   ) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: viewModel.currentPage == 0
+              ? const SizedBox()
+              : BackButton(
+                  onPressed: () {
+                    viewModel.nextPage();
+                  },
+                ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.maybePop(context);
+                },
+                icon: const Icon(Icons.close)),
+            horizontalSpaceSmall
+          ],
+        ),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: PageView(
-            controller: viewModel.pageController,
-            physics: const NeverScrollableScrollPhysics(), // Disable swipe
-            children: [
-              numberSection(viewModel, context, numberInputController),
-              otpSection(viewModel),
-              nameSection(viewModel, context)
-            ],
-          ),
-        ));
+            padding: const EdgeInsets.all(18.0),
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: screenHeight(context),
+                child: PageView(
+                  controller: viewModel.pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    numberSection(viewModel, context, numberInputController),
+                    otpSection(viewModel, context),
+                    nameSection(viewModel, context)
+                  ],
+                ),
+              ),
+            )));
   }
 
   Widget numberSection(LoginViewModel vm, BuildContext ctx,
@@ -46,25 +67,25 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
-        verticalSpaceLarge,
+        verticalSpaceMedium,
         Center(
             child: Image.asset(
           "assets/images/logo.png",
-          width: 100,
+          width: 140,
         )),
         verticalSpaceLarge,
-        verticalSpaceLarge,
+        verticalSpaceSmall,
         ShowText(
           text: "Welcome",
           fontWeight: FontWeight.bold,
           color: Theme.of(ctx).primaryColor,
-          fontSize: 28,
+          fontSize: 34,
         ),
         ShowText(
           text: "Sign in to Continue",
           fontWeight: FontWeight.normal,
-          color: Theme.of(ctx).shadowColor,
-          fontSize: 14,
+          color: Theme.of(ctx).shadowColor.withAlpha(60),
+          fontSize: 16,
         ),
         const Spacer(),
         CustomTextFormField(
@@ -75,7 +96,6 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                 child: ShowText(text: "+91"),
               ),
             ),
-            // validate: loginviewva,
             keyboardType: const TextInputType.numberWithOptions(),
             label: "Enter Your Phone Number",
             hintText: "Mobile Number"),
@@ -98,12 +118,13 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
           ],
         ),
         CustomButton(
+          titleWidget: vm.isBusy ? const CircularProgressIndicator() : null,
           title: "Next ->",
           onPressed: () {
             vm.sendOtp(int.parse(numberController.text));
-            // vm.nextPage();
           },
         ),
+        verticalSpaceLarge,
         verticalSpaceLarge,
         verticalSpaceLarge,
         verticalSpaceLarge,
@@ -111,50 +132,43 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
     );
   }
 
-  Column otpSection(LoginViewModel vm) {
+  Column otpSection(LoginViewModel vm, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                onPressed: () {
-                  vm.previousPage();
-                },
-                icon: const Icon(Icons.arrow_back_ios)),
-            const ShowText(
-              text: "Verify Otp",
-              fontSize: 18,
-            ),
-            const Spacer(),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.close))
-          ],
-        ),
         verticalSpaceMedium,
-        const Spacer(),
+        Center(
+            child: Image.asset(
+          "assets/images/logo.png",
+          width: 140,
+        )),
+        verticalSpaceLarge,
+        const ShowText(
+          text: "Verify Otp",
+          fontSize: 18,
+        ),
+        verticalSpaceSmall,
         ShowText(
             textAlign: TextAlign.center,
             maxLines: 2,
             text:
                 "Please enter the 4 digital verification code sent to your mobile  number +91-${numberInputController.text} via SMS"),
         verticalSpaceLarge,
-        const Spacer(),
-        verticalSpaceLarge,
         verticalSpaceMedium,
         Pinput(
-          // You can pass your own SmsRetriever implementation based on any package
-          // in this example we are using the SmartAuth
-          // smsRetriever: smsRetriever,
           controller: otpInputController,
           focusNode: otpInputFocusNode,
-          // defaultPinTheme: defaultPinTheme,
+          showCursor: true,
+          defaultPinTheme: PinTheme(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Theme.of(context).splashColor),
+                borderRadius: BorderRadius.circular(10)),
+          ),
           separatorBuilder: (index) => const SizedBox(width: 8),
-          // validator: (value) {
-          //   return vm.validatedOtp! ? "Success" : 'Pin is incorrect';
-          // },
           hapticFeedbackType: HapticFeedbackType.lightImpact,
           onCompleted: (pin) {
             vm.validateOtp(
@@ -170,26 +184,9 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                 margin: const EdgeInsets.only(bottom: 9),
                 width: 22,
                 height: 1,
-                // color: focusedBorderColor,
               ),
             ],
           ),
-          // focusedPinTheme: defaultPinTheme.copyWith(
-          //   decoration: defaultPinTheme.decoration!.copyWith(
-          //     borderRadius: BorderRadius.circular(8),
-          //     border: Border.all(color: focusedBorderColor),
-          //   ),
-          // ),
-          // submittedPinTheme: defaultPinTheme.copyWith(
-          //   decoration: defaultPinTheme.decoration!.copyWith(
-          //     color: fillColor,
-          //     borderRadius: BorderRadius.circular(19),
-          //     border: Border.all(color: focusedBorderColor),
-          //   ),
-          // ),
-          // errorPinTheme: defaultPinTheme.copyBorderWith(
-          //   border: Border.all(color: Colors.redAccent),
-          // ),
         ),
         verticalSpaceLarge,
         verticalSpaceMedium,
@@ -197,7 +194,12 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
         const ShowText(text: "Recent it in 23 second"),
         verticalSpaceLarge,
         CustomButton(
-          title: "Next ->",
+          titleWidget: vm.isBusy
+              ? const CircularProgressIndicator(
+                  color: Colors.white,
+                )
+              : null,
+          title: "Verify Otp",
           onPressed: () {
             vm.checkLogin();
           },
@@ -234,19 +236,23 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
           color: Theme.of(ctx).shadowColor,
           fontSize: 14,
         ),
-        verticalSpaceMedium, const Spacer(),
+        verticalSpaceMedium,
+        const Spacer(),
         CustomTextFormField(
             controller: nameInputController,
             label: "Tell Us Your Name",
             hintText: "Enter Your Name"),
         verticalSpaceMedium,
         verticalSpaceMedium,
-        // const Spacer(),
         CustomButton(
+          titleWidget: vm.isBusy
+              ? const CircularProgressIndicator(
+                  color: Colors.white,
+                )
+              : null,
           title: "Confirm Name",
           onPressed: () {
             vm.updateName(nameInputController.text);
-            // vm.nextPage();
           },
         ),
         const Spacer(),

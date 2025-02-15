@@ -37,9 +37,11 @@ class ShowText extends StatelessWidget {
 // 📌 2. Custom Button Widget (Localized Button)
 class CustomButton extends StatelessWidget {
   final String title;
+  final Widget? titleWidget;
   final VoidCallback? onPressed;
   final Color? color;
   final Color? textColor;
+  final double? elevation;
   final double borderRadius;
 
   const CustomButton({
@@ -49,24 +51,28 @@ class CustomButton extends StatelessWidget {
     this.color,
     this.textColor,
     this.borderRadius = 8.0,
+    this.titleWidget,
+    this.elevation,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
+        elevation: elevation ?? 0,
         backgroundColor: color ?? Theme.of(context).primaryColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius)),
         minimumSize: const Size(double.infinity, 50),
       ),
       onPressed: onPressed ?? () {},
-      child: Text(
-        title, // Use localized text
-        style: TextStyle(
-            color: textColor ??
-                Theme.of(context).primaryTextTheme.labelLarge?.color),
-      ),
+      child: titleWidget ??
+          Text(
+            title,
+            style: TextStyle(
+                color: textColor ??
+                    Theme.of(context).primaryTextTheme.labelLarge?.color),
+          ),
     );
   }
 }
@@ -113,13 +119,22 @@ class CustomTextFormField extends StatelessWidget {
                 return null;
               },
           decoration: InputDecoration(
+            // disabledBorder: OutlineInputBorder(
+            // : BorderSide(
+            //     width: 0.2,
+            //     color: Theme.of(context).shadowColor.withAlpha(80))),
             hintText: hintText, // Localized hint text
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon != null
                 ? IconButton(
                     icon: Icon(suffixIcon), onPressed: suffixAction ?? () {})
                 : null,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: BorderSide(
+                    width: 0.2,
+                    color: Theme.of(context).shadowColor.withAlpha(80))),
+
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           ),

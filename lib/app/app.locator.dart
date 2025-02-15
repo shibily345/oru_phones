@@ -37,7 +37,8 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => ProductsService());
   locator.registerLazySingleton(() => AuthenticationService());
   locator.registerLazySingleton(() => FiltersService());
-  locator.registerLazySingleton(() => ProductsPageViewModel());
+  locator.registerLazySingleton<ProductsPageViewModel>(
+      () => ProductsPageViewModel());
   locator.registerLazySingleton(() => FcmNotificationService());
   locator.registerLazySingleton(() => FaqsService());
 }

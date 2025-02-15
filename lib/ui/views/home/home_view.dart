@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oru_phones/domain/models/faq_model.dart';
 import 'package:oru_phones/ui/common/ui_helpers.dart';
 import 'package:oru_phones/ui/views/home/home_view.form.dart';
@@ -23,60 +24,66 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
     HomeViewModel viewModel,
     Widget? child,
   ) {
-    return ViewModelBuilder<HomeViewModel>.reactive(
-        viewModelBuilder: () => HomeViewModel(),
-        builder: (context, model, child) {
-          return Scaffold(
-              floatingActionButton: const SellButton(),
-              drawer: DrawerMain(
+    return Scaffold(
+        floatingActionButton: const SellButton(),
+        drawer: DrawerMain(
+          vm: viewModel,
+        ),
+        body: SafeArea(
+          child: CustomScrollView(
+            shrinkWrap: true,
+            slivers: <Widget>[
+              AppBarMain(
                 vm: viewModel,
               ),
-              body: SafeArea(
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    AppBarMain(
-                      vm: model,
+              SearchHead(
+                  viewModel: viewModel, controller: searchInputController),
+              MainSlider(
+                viewModel: viewModel,
+              ),
+              _buildOnMind(viewModel, context),
+              _buildBrands(viewModel, context),
+              _buildDealsAndSort(viewModel, context),
+              SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                  ),
+                  sliver: SliverGrid.builder(
+                    itemCount: viewModel.products.length,
+                    itemBuilder: (context, index) {
+                      int realIndex = index - (index ~/ 8);
+
+                      if ((index + 1) % 8 == 0) {
+                        return _adCard(index);
+                      } else {
+                        return ProductCard(
+                            product: viewModel.products[realIndex]);
+                      }
+                    },
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 0.6,
                     ),
-                    SearchHead(
-                        viewModel: model, controller: searchInputController),
-                    MainSlider(
-                      viewModel: model,
-                    ),
-                    _buildOnMind(model, context),
-                    _buildBrands(model, context),
-                    _buildDealsAndSort(model, context),
-                    SliverPadding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                        ),
-                        sliver: SliverGrid.builder(
-                          itemCount: model.products.length,
-                          itemBuilder: (context, index) {
-                            return ProductCard(
-                                vm: model, product: model.products[index]);
-                          },
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                            childAspectRatio: 0.6,
-                          ),
-                        )),
-                    _buildFaqHeader(),
-                    ...viewModel.faqs.asMap().entries.map((
-                      item,
-                    ) {
-                      return _buildFaqBox(viewModel, item, model);
-                    }).toList(),
-                    const SliverToBoxAdapter(
-                      child: verticalSpaceLarge,
-                    ),
-                    const FooterDetails()
-                  ],
-                ),
-              ));
-        });
+                  )),
+              _buildFaqHeader(),
+              ...viewModel.faqs.asMap().entries.map((
+                item,
+              ) {
+                return _buildFaqBox(
+                  viewModel,
+                  item,
+                );
+              }).toList(),
+              SliverToBoxAdapter(
+                child: verticalSpaceLarge,
+              ),
+              const FooterDetails()
+            ],
+          ),
+        ));
   }
 
   SliverToBoxAdapter _buildFaqHeader() {
@@ -85,12 +92,13 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
         children: [
           verticalSpaceLarge,
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
             child: Row(
               children: [
                 const ShowText(
                   text: "Frequently Asked Questians",
                   fontSize: 17,
+                  fontWeight: FontWeight.w500,
                 ),
                 const Spacer(),
                 IconButton(
@@ -104,7 +112,9 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
   }
 
   SliverToBoxAdapter _buildFaqBox(
-      HomeViewModel viewModel, MapEntry<int, FAQ> item, HomeViewModel model) {
+    HomeViewModel viewModel,
+    MapEntry<int, FAQ> item,
+  ) {
     return SliverToBoxAdapter(
         child: GestureDetector(
       onTap: () {
@@ -112,50 +122,63 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
       },
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          AnimatedContainer(
+            duration: const Duration(microseconds: 1300),
+            margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.grey.shade200,
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(width: 0.4, color: Colors.black.withAlpha(80)),
               boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                ),
+                if (viewModel.expandedIndex == item.key)
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                  ),
               ],
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: Text(
-                    item.value.question,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.value.question,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      Icon(
+                        viewModel.expandedIndex == item.key
+                            ? Icons.close
+                            : Icons.add,
+                        color: Colors.black54,
+                      ),
+                    ],
                   ),
                 ),
-                Icon(
-                  viewModel.expandedIndex == item.key ? Icons.close : Icons.add,
-                  color: Colors.black54,
-                ),
+                if (viewModel.expandedIndex == item.key)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(10)),
+                    ),
+                    child: Text(
+                      item.value.answer,
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black87),
+                    ),
+                  ),
               ],
             ),
           ),
-          if (model.expandedIndex == item.key)
-            Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                item.value.answer,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
-              ),
-            ),
         ],
       ),
     ));
@@ -169,10 +192,11 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: ShowText(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+              child: const ShowText(
                 text: "Whats on your mind?",
+                fontWeight: FontWeight.w500,
                 fontSize: 17,
               ),
             ),
@@ -180,23 +204,26 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
+                spacing: 10.w,
                 children: viewModel.menuItems.map((item) {
                   return GestureDetector(
                     onTap: () => Navigator.pushNamed(context, item["route"]!),
                     child: SizedBox(
-                      width: 120,
+                      width: 110.w,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Image.asset(item["image"]!,
-                              width: 100, height: 100, fit: BoxFit.cover),
+                              width: 100.w, height: 100.w, fit: BoxFit.contain),
                           Text(
+                            maxLines: 2,
                             item["title"]!,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500),
+                                fontSize: 13, fontWeight: FontWeight.w400),
                           ),
-                          verticalSpaceLarge
+                          verticalSpaceMedium
                         ],
                       ),
                     ),
@@ -219,11 +246,12 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0.w),
               child: Row(
                 children: [
                   const ShowText(
                     text: "Top Brands",
+                    fontWeight: FontWeight.w500,
                     fontSize: 17,
                   ),
                   const Spacer(),
@@ -236,41 +264,40 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
             verticalSpaceSmall,
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(children: [
+              child: Row(spacing: 10.w, children: [
+                horizontalSpaceSmall,
                 ...viewModel.brands.take(6).map((item) {
                   return GestureDetector(
                     child: SizedBox(
-                      width: 120,
+                      width: 80.w,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CircleAvatar(
                               backgroundColor:
-                                  const Color.fromARGB(255, 234, 229, 229),
-                              radius: 50,
+                                  const Color.fromARGB(170, 236, 236, 236),
+                              radius: 50.w,
                               child: CachedImage(
                                 imageUrl: item.imagePath,
-                                height: 30,
-                                width: 80,
+                                width: 60.w,
                                 fit: BoxFit.contain,
                               )),
-                          verticalSpaceLarge
+                          verticalSpaceSmall
                         ],
                       ),
                     ),
                   );
                 }).toList(),
                 GestureDetector(
-                  child: const SizedBox(
-                    width: 120,
-                    child: Column(
+                  child: SizedBox(
+                    width: 120.w,
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CircleAvatar(
                             backgroundColor: Color.fromARGB(255, 234, 229, 229),
                             radius: 50,
                             child: ShowText(text: "Viwe all >")),
-                        verticalSpaceLarge
                       ],
                     ),
                   ),
@@ -292,12 +319,13 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0.w),
               child: Row(
                 children: [
                   const ShowText(
                     text: "Best Deals Near You",
                     fontSize: 17,
+                    fontWeight: FontWeight.w500,
                   ),
                   const Spacer(),
                   IconButton(
@@ -308,7 +336,7 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
                 ],
               ),
             ),
-            verticalSpaceSmall,
+            verticalSpaceMedium,
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(children: [
@@ -322,8 +350,8 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
                       borderRadius: BorderRadius.circular(10),
                       side: BorderSide(color: Colors.grey.shade400),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   ),
                   onPressed: () {
                     viewModel.showSortBottomSheet();
@@ -383,6 +411,10 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
       ),
     );
   }
+
+  Image _adCard(int index) => Image.asset((index ~/ 8) % 2 == 0
+      ? 'assets/images/Sell.png'
+      : 'assets/images/Compare.png');
 
   @override
   void onViewModelReady(HomeViewModel viewModel) {

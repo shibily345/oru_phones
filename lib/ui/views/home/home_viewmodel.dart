@@ -1,22 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:oru_phones/app/app.bottomsheets.dart';
 import 'package:oru_phones/app/app.dialogs.dart';
 import 'package:oru_phones/app/app.locator.dart';
 import 'package:oru_phones/app/app.router.dart';
 import 'package:oru_phones/domain/models/faq_model.dart';
 import 'package:oru_phones/domain/models/product.dart';
+import 'package:oru_phones/domain/models/user_model.dart';
 import 'package:oru_phones/services/authentication_service.dart';
 import 'package:oru_phones/services/faqs_service.dart';
 import 'package:oru_phones/services/products_service.dart';
 import 'package:oru_phones/ui/common/app_strings.dart';
+import 'package:oru_phones/ui/views/products_page/products_page_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class HomeViewModel extends FormViewModel {
-  static final HomeViewModel _instance = HomeViewModel._internal();
-  factory HomeViewModel() => _instance;
-  HomeViewModel._internal();
-  // final _productService = locator<ProductsService>();
-
+  final productVm = locator<ProductsPageViewModel>();
   final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _navigationService = locator<NavigationService>();
@@ -24,15 +23,13 @@ class HomeViewModel extends FormViewModel {
 
   final List<Product> _products = locator<ProductsService>().products;
   final List<FAQ> _faqs = locator<FaqsService>().faqs;
-
+  User get user => _authServices.user!;
   List<Product> get products => _products;
   List<FAQ> get faqs => _faqs;
   bool filterApplyed = false;
   bool sortApplyed = false;
   bool isExpanded = false;
   int? expandedIndex;
-  final List<Product> _productFiltered = [];
-  List<Product> get productFiltered => _productFiltered;
 
   final brands = locator<ProductsService>().brands;
   String get counterLabel => 'Counter is: $_counter';
@@ -56,6 +53,14 @@ class HomeViewModel extends FormViewModel {
     "assets/images/Property 1=Banner 3.png",
     "assets/images/Property 1=Banner 4.png",
     "assets/images/Property 1=Banner 5.png",
+  ];
+  final List<Map<String, dynamic>> items = [
+    {"icon": Icons.shopping_cart, "label": "How to Buy"},
+    {"icon": Icons.attach_money, "label": "How to Sell"},
+    {"icon": Icons.question_answer, "label": "FAQs"},
+    {"icon": Icons.info, "label": "About Us"},
+    {"icon": Icons.privacy_tip, "label": "Privacy Policy"},
+    {"icon": Icons.assignment_return, "label": "Return Policy"},
   ];
 
   final List<Map<String, String>> menuItems = [
@@ -106,12 +111,6 @@ class HomeViewModel extends FormViewModel {
     rebuildUi();
   }
 
-  void likeProduct(String id) {
-    _authServices.updateFavs(id);
-    _authServices.likedProducts;
-    rebuildUi();
-  }
-
   void expandFaq(int index) {
     expandedIndex = expandedIndex == index ? null : index;
     isExpanded = !isExpanded;
@@ -139,39 +138,13 @@ class HomeViewModel extends FormViewModel {
     _navigationService.replaceWithStartupView();
   }
 
-  void showBottomSheet() {
+  void showLoginBottomSheet() {
     _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.login,
       title: ksHomeBottomSheetTitle,
       description: ksHomeBottomSheetDescription,
     );
   }
-
-  // void rebuildWithFilter(SelectedFilterModel filter) {
-  //   setBusy(true);
-  //   // products = ;
-  //   "$productFiltered  al +++++++++++++++++++++++++++++".dp;
-  //   filterApplyed = true;
-  //   if (filterApplyed) {
-  //     "successfully aplied ".dp;
-  //   }
-  //   _navigationService.navigateToProductsPageView;
-  //   setBusy(false);
-  // }
-
-  // void rebuildWithSort(List<Product> sortedProducts) {
-  //   setBusy(true);
-  //   _productFiltered = List.from(sortedProducts);
-  //   "${sortedProducts.first.listingPrice}  al +++${sortedProducts[2].listingPrice}+++++++${sortedProducts[5].listingPrice}++++++++${sortedProducts.last.listingPrice}+++++++++++"
-  //       .dp;
-  //   sortApplyed = true;
-  //   if (sortApplyed) {
-  //     "successfully aplied ".dp;
-  //   }
-  //   rebuildUi();
-  //   notifyListeners();
-  //   setBusy(false);
-  // }
 
   void showFilterBottomSheet() {
     _bottomSheetService.showCustomSheet(
