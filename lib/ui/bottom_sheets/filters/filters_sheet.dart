@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oru_phones/domain/models/selected_filter_model.dart';
+import 'package:oru_phones/ui/common/ui_helpers.dart';
+import 'package:oru_phones/ui/views/home/widgets/default.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -21,7 +24,7 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
     Widget? child,
   ) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -31,13 +34,24 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
       ),
       child: Column(
         children: [
+          Container(
+            color: Colors.grey.withAlpha(130),
+            width: 80,
+            height: 5,
+          ),
           _buildHeader(viewModel),
-          const Divider(height: 1),
+          Divider(
+            height: 1,
+            color: Colors.black.withAlpha(40),
+          ),
           Expanded(
             child: Row(
               children: [
                 _buildFilterCategories(viewModel),
-                const VerticalDivider(width: 1),
+                VerticalDivider(
+                  width: 1,
+                  color: Colors.black.withAlpha(40),
+                ),
                 _buildFilterOptions(viewModel),
               ],
             ),
@@ -69,21 +83,46 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
 
   Widget _buildFilterCategories(FiltersSheetModel vm) {
     return SizedBox(
-      width: 120,
+      width: 140,
       child: ListView(
         children: vm.filterModel!.dataObject.toJson().keys.map((category) {
           bool isSelected = vm.selectedFilter == category;
-          return ListTile(
-            title: Text(
-              category,
-              style: TextStyle(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Colors.black : Colors.grey[700],
+          return GestureDetector(
+            onTap: () => vm.selectCategory(category),
+            child: Container(
+              // padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: 80.h,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.amber.withAlpha(30)
+                    : Colors.transparent,
+              ),
+              // style: ListTileStyle.drawer,
+
+              // selected: isSelected,
+              child: Row(
+                children: [
+                  !isSelected
+                      ? const SizedBox()
+                      : Container(
+                          width: 5.w,
+                          color: Colors.amber,
+                        ),
+                  horizontalSpaceSmall,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      category,
+                      style: TextStyle(
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected ? Colors.black : Colors.grey[700],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            tileColor:
-                isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
-            onTap: () => vm.selectCategory(category),
           );
         }).toList(),
       ),
@@ -129,12 +168,17 @@ class FiltersSheet extends StackedView<FiltersSheetModel> {
                 style: TextStyle(
                     color: Colors.amber, fontWeight: FontWeight.bold)),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-            onPressed: () {
-              vm.applyFilter(request.title);
-            },
-            child: const Text("Apply"),
+          SizedBox(
+            height: 50.h,
+            width: 180.w,
+            child: CustomButton(
+              color: Colors.amber,
+              onPressed: () {
+                vm.applyFilter(request.title);
+              },
+              title: "Apply",
+              textColor: Colors.black,
+            ),
           ),
         ],
       ),

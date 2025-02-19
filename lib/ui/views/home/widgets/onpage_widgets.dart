@@ -476,11 +476,12 @@ class SearchHead extends StatelessWidget {
                     padding: EdgeInsets.only(left: 5.0.w),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        elevation: 0,
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: Colors.grey.shade400),
+                          side: BorderSide(color: Colors.grey.shade300),
                         ),
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 6.h),

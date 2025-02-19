@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:oru_phones/domain/extensions/extensions.dart';
+import 'package:oru_phones/themes/extensions/extensions.dart';
 import 'package:oru_phones/domain/models/brands/brand.dart';
 import 'package:oru_phones/domain/models/faq_model.dart';
 import 'package:oru_phones/domain/models/filter_model.dart';
@@ -10,6 +10,8 @@ import '../domain/models/product.dart';
 
 class ApiService {
   final String baseUrl = '40.90.224.241:5000';
+
+  // ! Get products from api
 
   Future<List<Product>> getProducts({Map<String, dynamic>? filters}) async {
     final Uri uri = Uri.http(baseUrl, '/filter');
@@ -33,6 +35,8 @@ class ApiService {
     throw Exception('Response Code: ${response.statusCode} - ${response.body}');
   }
 
+  // ! Get Brand List from api
+
   Future<List<Brand>> getBrands() async {
     final url = Uri.http(baseUrl, "/makeWithImages");
 
@@ -47,7 +51,7 @@ class ApiService {
     }
   }
 
-  //!- Authentication
+  //!- Authentication - send otp
 
   Future<OtpResponse> sendOtp(int countryCode, int mobileNumber) async {
     final url = Uri.http(baseUrl, "/login/otpCreate");
@@ -74,14 +78,14 @@ class ApiService {
   //! Get Filters
 
   Future<FilterModel?> fetchFilters() async {
-    "fetching Filter".dp;
+    // "fetching Filter".dp;
     final url = Uri.http(baseUrl, "/showSearchFilters");
 
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        "Got dataass ${response.body}";
+        // "Got dataass ${response.body}";
 
         final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
 
@@ -91,7 +95,7 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print("Error fetching filters: $e");
+      "Error fetching filters: $e".dp;
       throw Exception(e);
     }
   }

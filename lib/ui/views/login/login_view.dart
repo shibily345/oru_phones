@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oru_phones/ui/common/ui_helpers.dart';
 import 'package:oru_phones/ui/views/home/widgets/default.dart';
 import 'package:oru_phones/ui/views/login/login_view.form.dart';
@@ -52,16 +53,16 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                   controller: viewModel.pageController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    numberSection(viewModel, context, numberInputController),
-                    otpSection(viewModel, context),
-                    nameSection(viewModel, context)
+                    _numberSection(viewModel, context, numberInputController),
+                    _otpSection(viewModel, context),
+                    _nameSection(viewModel, context)
                   ],
                 ),
               ),
             )));
   }
 
-  Widget numberSection(LoginViewModel vm, BuildContext ctx,
+  Widget _numberSection(LoginViewModel vm, BuildContext ctx,
       TextEditingController numberController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,7 +133,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
     );
   }
 
-  Column otpSection(LoginViewModel vm, BuildContext context) {
+  Column _otpSection(LoginViewModel vm, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -141,12 +142,14 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
         Center(
             child: Image.asset(
           "assets/images/logo.png",
-          width: 140,
+          width: 140.w,
         )),
-        verticalSpaceLarge,
+        verticalSpaceMassive,
         const ShowText(
-          text: "Verify Otp",
-          fontSize: 18,
+          text: "Verify Mobile Number...",
+          fontSize: 24,
+          color: Color.fromARGB(255, 1, 31, 83),
+          fontWeight: FontWeight.w700,
         ),
         verticalSpaceSmall,
         ShowText(
@@ -161,8 +164,8 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
           focusNode: otpInputFocusNode,
           showCursor: true,
           defaultPinTheme: PinTheme(
-            width: 50,
-            height: 50,
+            width: 50.w,
+            height: 50.w,
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Theme.of(context).splashColor),
@@ -211,7 +214,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
     );
   }
 
-  Column nameSection(LoginViewModel vm, BuildContext ctx) {
+  Column _nameSection(LoginViewModel vm, BuildContext ctx) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,

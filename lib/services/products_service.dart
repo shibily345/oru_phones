@@ -29,12 +29,12 @@ class ProductsService with ListenableServiceMixin {
     return _products;
   }
 
-  Future<List<Product>> getProductsWithSorting(
-      Map<String, dynamic> sort) async {
-    _products = await _apiService.getProducts(filters: sort);
-    notifyListeners();
-    return _products;
-  }
+  // Future<List<Product>> getProductsWithSorting(
+  //     Map<String, dynamic> sort) async {
+  //   _products = await _apiService.getProducts(filters: sort);
+  //   notifyListeners();
+  //   return _products;
+  // }
 
   Future<List<Brand>> getBrands() async {
     _brands = await _apiService.getBrands();

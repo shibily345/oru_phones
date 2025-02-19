@@ -1,6 +1,6 @@
 import 'package:oru_phones/app/app.locator.dart';
 import 'package:oru_phones/app/app.router.dart';
-import 'package:oru_phones/domain/extensions/extensions.dart';
+import 'package:oru_phones/themes/extensions/extensions.dart';
 import 'package:oru_phones/domain/models/filter_model.dart';
 import 'package:oru_phones/domain/models/selected_filter_model.dart';
 import 'package:oru_phones/services/filters_service.dart';

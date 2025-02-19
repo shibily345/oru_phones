@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oru_phones/ui/views/home/widgets/default.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -43,7 +45,9 @@ class SortSheet extends StackedView<SortSheetModel> {
               ],
             ),
           ),
-          const Divider(),
+          Divider(
+            color: Colors.black.withAlpha(30),
+          ),
           ListView.builder(
             shrinkWrap: true,
             itemCount: viewModel.options.length,
@@ -77,7 +81,9 @@ class SortSheet extends StackedView<SortSheetModel> {
               );
             },
           ),
-          const Divider(),
+          Divider(
+            color: Colors.black.withAlpha(30),
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -92,19 +98,24 @@ class SortSheet extends StackedView<SortSheetModel> {
                     style: TextStyle(color: Colors.amber),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: viewModel.selectedIndex == null
-                      ? null
-                      : () {
-                          viewModel.applySort(
-                              viewModel.options[viewModel.selectedIndex!],
-                              request.title);
-                        },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    foregroundColor: Colors.black,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 50.h,
+                    width: 180.w,
+                    child: CustomButton(
+                      color: Colors.amber,
+                      onPressed: viewModel.selectedIndex == null
+                          ? null
+                          : () {
+                              viewModel.applySort(
+                                  viewModel.options[viewModel.selectedIndex!],
+                                  request.title);
+                            },
+                      title: "Apply",
+                      textColor: Colors.black,
+                    ),
                   ),
-                  child: const Text("Apply"),
                 ),
               ],
             ),

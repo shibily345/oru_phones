@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oru_phones/app/app.locator.dart';
 import 'package:oru_phones/app/app.router.dart';
-import 'package:oru_phones/domain/extensions/extensions.dart';
+import 'package:oru_phones/themes/extensions/extensions.dart';
 import 'package:oru_phones/services/authentication_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';

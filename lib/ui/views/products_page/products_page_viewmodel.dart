@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oru_phones/app/app.bottomsheets.dart';
 import 'package:oru_phones/app/app.locator.dart';
-import 'package:oru_phones/domain/extensions/extensions.dart';
+import 'package:oru_phones/themes/extensions/extensions.dart';
 import 'package:oru_phones/domain/models/product.dart';
 import 'package:oru_phones/domain/models/selected_filter_model.dart';
 import 'package:oru_phones/services/authentication_service.dart';
@@ -20,9 +20,9 @@ class ProductsPageViewModel extends BaseViewModel {
   final _productService = locator<ProductsService>();
   SelectedFilterModel _filter = SelectedFilterModel();
   SelectedFilterModel get filter => _filter;
-  final _dialogService = locator<DialogService>();
+  // final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
-  final _navigationService = locator<NavigationService>();
+  // final _navigationService = locator<NavigationService>();
   final _authServices = locator<AuthenticationService>();
   List<dynamic> _likedPs = [];
   List<dynamic> get likedPs => _likedPs;
@@ -38,8 +38,6 @@ class ProductsPageViewModel extends BaseViewModel {
   int _currentPage = 1;
 
   void initScroll() {
-    "check working".dp;
-
     scrollController.addListener(_onScroll);
   }
 
@@ -50,8 +48,8 @@ class ProductsPageViewModel extends BaseViewModel {
 
   void _onScroll() {
     if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 100) {
-      print("🔄 Scrolled to Bottom - Fetching More Data...");
+            scrollController.position.maxScrollExtent &&
+        !isBusy) {
       _loadMoreProducts();
     }
   }
@@ -60,12 +58,18 @@ class ProductsPageViewModel extends BaseViewModel {
     return _likedPs.contains(value);
   }
 
+  void pageOne() {
+    _currentPage = 0;
+  }
+
   Future<void> _loadMoreProducts() async {
     "Loading More......".dp;
     setBusy(true);
 
     await Future.delayed(const Duration(seconds: 2));
-
+    if (_currentPage >= 100) {
+      _currentPage = 1;
+    }
     _currentPage++;
     _products.addAll(await _productService.getProductsWithFilters(
         _filter.copyWith(page: _currentPage), null));
@@ -124,7 +128,6 @@ class ProductsPageViewModel extends BaseViewModel {
   void rebuildWithSort(Map<String, dynamic> sort) async {
     setBusy(true);
     _currentPage = 1;
-    setBusy(true);
     _products = await _productService.getProductsWithFilters(_filter, sort);
     "$productFiltered  al +++++++++++++++++++++++++++++".dp;
     sortApplyed = true;

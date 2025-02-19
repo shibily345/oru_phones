@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oru_phones/app/app.bottomsheets.dart';
 import 'package:oru_phones/app/app.locator.dart';
 import 'package:oru_phones/app/app.router.dart';
-import 'package:oru_phones/domain/extensions/extensions.dart';
+import 'package:oru_phones/themes/extensions/extensions.dart';
 import 'package:oru_phones/services/authentication_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -11,14 +11,6 @@ class LoginViewModel extends FormViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   final _authService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
-
-  void showBottomSheet() {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.notice,
-      title: "ksHomeBottomSheetTitle",
-      description: "ksHomeBottomSheetDescription",
-    );
-  }
 
   final PageController pageController = PageController(initialPage: 0);
   int currentPage = 0;
@@ -72,6 +64,14 @@ class LoginViewModel extends FormViewModel {
     setBusy(false);
   }
 
+  void showBottomSheet() {
+    _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.notice,
+      title: "ksHomeBottomSheetTitle",
+      description: "ksHomeBottomSheetDescription",
+    );
+  }
+
   void nextPage() {
     if (currentPage < 2) {
       currentPage++;
@@ -82,20 +82,6 @@ class LoginViewModel extends FormViewModel {
       );
       rebuildUi();
     }
-  }
-
-  String? numberValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter a number';
-    }
-    final number = num.tryParse(value);
-    if (number == null) {
-      return 'Please enter a valid number';
-    }
-    if (number < 0) {
-      return 'Number cannot be negative';
-    }
-    return null;
   }
 
   void previousPage() {

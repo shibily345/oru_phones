@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:oru_phones/app/app.bottomsheets.dart';
-import 'package:oru_phones/app/app.dialogs.dart';
 import 'package:oru_phones/app/app.locator.dart';
 import 'package:oru_phones/app/app.router.dart';
 import 'package:oru_phones/domain/models/faq_model.dart';
@@ -16,26 +15,30 @@ import 'package:stacked_services/stacked_services.dart';
 
 class HomeViewModel extends FormViewModel {
   final productVm = locator<ProductsPageViewModel>();
-  final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _navigationService = locator<NavigationService>();
   final _authServices = locator<AuthenticationService>();
+  final brands = locator<ProductsService>().brands;
 
   final List<Product> _products = locator<ProductsService>().products;
   final List<FAQ> _faqs = locator<FaqsService>().faqs;
+
   User get user => _authServices.user!;
+
   List<Product> get products => _products;
   List<FAQ> get faqs => _faqs;
+
   bool filterApplyed = false;
   bool sortApplyed = false;
   bool isExpanded = false;
   int? expandedIndex;
 
-  final brands = locator<ProductsService>().brands;
-  String get counterLabel => 'Counter is: $_counter';
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
   bool get isLoggedin => _authServices.isLoggedin;
+
+  // ! Default Datas
+
   final List<String> options = [
     "Sell Used Phones",
     "Buy Used Phones",
@@ -105,25 +108,21 @@ class HomeViewModel extends FormViewModel {
       "route": "/get-app"
     },
   ];
-  final int _counter = 0;
+
+  // For Banner Slider
   void updateIndex(int index) {
     _currentIndex = index;
     rebuildUi();
   }
 
+  // For Faq List
   void expandFaq(int index) {
     expandedIndex = expandedIndex == index ? null : index;
     isExpanded = !isExpanded;
     rebuildUi();
   }
 
-  void showDialog() {
-    _dialogService.showCustomDialog(
-      variant: DialogType.infoAlert,
-      title: 'Stacked Rocks!',
-      description: 'Give stacked $_counter stars on Github',
-    );
-  }
+  //! Navigation
 
   void goToLogin() {
     _navigationService.navigateToLoginView();

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oru_phones/domain/models/product.dart';
@@ -42,24 +44,36 @@ class ProductCard extends StatelessWidget {
                             height: screenHeight(context) * 0.19)),
                     if (product.verified)
                       Positioned(
-                        top: 8,
-                        left: 8,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            "Verified",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
+                        top: 14,
+                        left: 0,
+                        child: Image.asset(
+                          "assets/images/ORUVerified.png",
+                          width: 100,
                         ),
                       ),
+                    if (product.openForNegotiation)
+                      Positioned(
+                          bottom: 0,
+                          child: ClipRRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                              child: Container(
+                                width: 200.w,
+                                // width: screenWidth(context),
+                                height: 20.h,
+                                // padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(110),
+                                ),
+                                child: Center(
+                                  child: ShowText(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      text: "Price Negotiable".toUpperCase()),
+                                ),
+                              ),
+                            ),
+                          )),
                     Positioned(
                       top: 8,
                       right: 8,

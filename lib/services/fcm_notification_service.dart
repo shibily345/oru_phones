@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:oru_phones/domain/extensions/extensions.dart';
+import 'package:oru_phones/themes/extensions/extensions.dart';
 
 class FcmNotificationService {
   static final FirebaseMessaging _firebaseMessaging =
@@ -37,8 +39,16 @@ class FcmNotificationService {
       _showNotification(message);
     });
 
-    final fcmToken = await _firebaseMessaging.getToken();
-    "token:  $fcmToken".dp;
+    // String? apnsToken = await _firebaseMessaging.getAPNSToken();
+
+    // if (apnsToken == null) {
+    //   "APNS token not yet set.".dp;
+    //   return;
+    // }
+    if (Platform.isAndroid) {
+      final fcmToken = await _firebaseMessaging.getToken();
+      "token:  $fcmToken".dp;
+    }
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
